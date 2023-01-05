@@ -12,10 +12,17 @@ $(document).ready(function () {
         $('.table-checkall tbody tr td input:checkbox').prop('checked', checked);
     });
 });
-var loadFile = function(event) {
+var loadFile = function (event) {
     var output = document.getElementById('image-show');
     output.src = URL.createObjectURL(event.target.files[0]);
-    output.onload = function() {
-      URL.revokeObjectURL(output.src) // free memory
+    output.onload = function () {
+        URL.revokeObjectURL(output.src) // free memory
     }
-  };
+};
+
+tinymce.init({
+    selector: 'textarea#product_detail',
+    plugins: "link image code table advtable lists checklist",
+    toolbar: 'undo redo | styleselect | bold italic | alignleft aligncenter alignright alignjustify | outdent indent',
+    height: 500,
+});

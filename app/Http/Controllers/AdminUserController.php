@@ -187,7 +187,7 @@ class AdminUserController extends Controller
         $user = User::find($id);
         return view('admin.user.edit', compact('user'));
     }
-    function update(Request $req,$id){
+    function update(Request $req, $id){
         $req->validate(
             [
                 'name'=> 'required|string|max:255',

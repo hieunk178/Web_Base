@@ -36,9 +36,9 @@
                 <div class="form-group">
                     <label for="avatar">Ảnh đại diện</label>
                     <div>
-                        <input type="file" name="avatar" id="avatar">
+                        <input type="file" name="avatar" id="avatar" onchange="loadFile(event)">
                         <div class="avatar-img">
-                            <img src="{{asset('images/user-blank.png')}}" alt="Ảnh đại diện">
+                            <img id="image-show"  src="{{asset('images/user-blank.png')}}" alt="Ảnh đại diện">
                         </div>
                     </div>
                 </div>

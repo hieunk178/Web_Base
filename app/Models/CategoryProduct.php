@@ -26,7 +26,7 @@ class CategoryProduct extends Model
         return $this->cats;
     }
 
-    public function getCatName(){
+    public static function getCatName(){
         $data = CategoryProduct::all();
         $catName = [];
         foreach($data as $item){

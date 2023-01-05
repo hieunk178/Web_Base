@@ -60,7 +60,7 @@
                             <td>
                                 <input type="checkbox" name="list_check[]" value="{{$cat->id}}">
                             </td>
-                            <td><img style="width:70px; height:70px" src="{{asset('images/'.$cat->image)}}" alt=""></td>
+                            <td><img style="width:80px; height:80px" src="{{asset('images/'.$cat->image)}}" alt=""></td>
                             <td>{{$cat->name}}</td>
                             <td>{{$cat->description}}</td>
                             @if($cat->id_parent == 0)

@@ -84,6 +84,14 @@ Route::middleware('auth')->group(function(){
 
     //Các route của amdin product (sản phẩm)
     Route::get('/admin/product/list',[AdminProductController::class, 'index'])->name('admin.product.list');
+    Route::get('/admin/product/list/{status}',[AdminProductController::class, 'index'])->name('admin.product.list.status');
     Route::get('/admin/product/create',[AdminProductController::class, 'create'])->name('admin.product.create');
+    Route::post('/admin/product/store',[AdminProductController::class, 'store'])->name('admin.product.store');
 
+    Route::get('/admin/product/remove/{id}',[AdminProductController::class, 'remove'])->name('admin.product.remove');
+    Route::get('/admin/product/restore/{id}',[AdminProductController::class, 'restore'])->name('admin.product.restore');
+    Route::get('/admin/product/delete/{id}',[AdminProductController::class, 'delete'])->name('admin.product.delete');
+    Route::get('/admin/product/action',[AdminProductController::class, 'action'])->name('admin.product.action');
+    Route::get('/admin/product/edit/{id}',[AdminProductController::class, 'edit'])->name('admin.product.edit');
+    Route::post('/admin/product/update/{id}',[AdminProductController::class, 'update'])->name('admin.product.update');
 });
