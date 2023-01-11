@@ -2,16 +2,18 @@
 
 namespace App\Http\Controllers;
 use App\Models\User;
-
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
+use App\Repositories\User\UserRepositoryInterface;
 
 class AdminUserController extends Controller
 {
     //
-    function __construct()
+    protected $userRepository;
+    function __construct(UserRepositoryInterface $userRepository)
     {
+        $this->userRepository = $userRepository;
         $this->middleware(function($request, $next){
             session(['module_active' => 'user']);
             return $next($request);
@@ -19,14 +21,8 @@ class AdminUserController extends Controller
     }
 
     function list(Request $request, $status=""){
-        $all_user = User::withTrashed();
-        $user_remove = User::onlyTrashed();
-        $user_active = User::all();
-        $count = array(
-            "all_user" => $all_user->count(),
-            "user_del" => $user_remove->count(),
-            "user_active" => $user_active->count(),
-        );
+        
+        $count = $this->userRepository->count();
         if($status == "del"){
             $list_act = [
                 'restore'=>"Khôi phục",
@@ -35,7 +31,7 @@ class AdminUserController extends Controller
             $search = "";
             if($request->input('keyword'))
                 $search = $request->input('keyword');
-            $users = $user_remove->where('name','LIKE', "%{$search}%")->paginate(10);
+            $users = $this->userRepository->getUserRemove($search);
             //dd($users->total()); 
             return view("admin.user.list", compact("users", "count", "list_act"));
         }else if($status == "active"){
@@ -45,11 +41,11 @@ class AdminUserController extends Controller
             $search = "";
             if($request->input('keyword'))
                 $search = $request->input('keyword');
-            $users = User::where('name','LIKE', "%{$search}%")->paginate(10);
+            $users = $this->userRepository->getUserActive($search);
             // dd($users->total()); 
             return view("admin.user.list", compact("users", "count", "list_act"));
         }else{
-            if($user_remove->count() != 0){
+            if($count['user_remove'] != 0){
                 $list_act = [
                     'restore'=>"Khôi phục",
                     'remove'=>"Vô hiệu hóa",
@@ -63,7 +59,7 @@ class AdminUserController extends Controller
             $search = "";
             if($request->input('keyword'))
                 $search = $request->input('keyword');
-            $users = $all_user->where('name','LIKE', "%{$search}%")->paginate(10);
+            $users = $this->userRepository->getAllUser($search);
             //dd($users->total()); 
             return view("admin.user.list", compact("users", "count", "list_act"));
         }
@@ -103,47 +99,42 @@ class AdminUserController extends Controller
             $req->avatar->move(public_path("images"), $fileName);
             $avatar = $fileName;
         }
-        User::create([
+        $user = [
             'name' =>$req->input('name'),
             'email' =>$req->input('email'),
             'gender' =>$req->input('gender'),
             'phone' =>$req->input('phone'),
             'password' => Hash::make($req->input('password')),
             'avatar' =>$avatar,
-        ]);
+        ];
+        $this->userRepository->create($user);
         return redirect('admin/user/list')->with('success', 'Đã thêm một người dùng mới!', 'alert', 'success');
     }
 
     //Xóa hoàn toàn một user khỏi hệ thống
     function delete($id){
-        if(Auth::id() != $id){
-            $user = User::withTrashed()->where('id', $id);
-            $user->forceDelete();
-            return redirect('admin/user/list')->with('success', "Bạn đã xóa vĩnh viễn thành viên!", 'alert', 'success');
+        if($this->userRepository->delete($id)){
+            return redirect('admin/user/list')->with('success', "Bạn đã xóa vĩnh viễn thành viên!");
         }else{
-            return redirect('admin/user/list')->with('danger', "Bạn không thêt xóa chính mình!", 'alert', 'danger');
+            return redirect('admin/user/list')->with('danger', "Bạn không thể xóa tài khoản này!");
         }
     }
 
     //Vô hiệu hóa một user
     function remove($id){
-        if(Auth::id() != $id){
-            $user = User::find($id);
-            $user->delete();
-            return redirect('admin/user/list')->with('success', "Bạn đã vô hiệu hóa thành viên thành công!", 'alert', 'success');
+        if($this->userRepository->remove($id)){
+            return redirect('admin/user/list')->with('success', "Bạn đã vô hiệu hóa tài khoản thành công!");
         }else{
-            return redirect('admin/user/list')->with('danger', "Bạn không thể tự vô hiệu hóa chính mình khỏi hệ thống!");
+            return redirect('admin/user/list')->with('danger', "Bạn không thể vô hiệu hóa tài khoản đó!");
         }
     }
 
     //Khôi phục một user bị vô hiệu hóa
     function restore($id){
-        if(Auth::id() != $id){
-            $user = User::withTrashed()->where('id', $id);
-            $user->restore();
-            return redirect('admin/user/list')->with('success', "Bạn đã khôi phục thành viên thành công!", 'alert', 'success');
+        if($this->userRepository->restore($id)){
+            return redirect('admin/user/list')->with('success', "Bạn đã khôi phúc tài khoản thành công!");
         }else{
-            return redirect('admin/user/list')->with('danger', "Bạn không thể khôi phục tài khoản này!", 'alert', 'success');
+            return redirect('admin/user/list')->with('danger', "Bạn không thể khôi phục tài khoản đó!");
         }
     }
 
@@ -184,7 +175,7 @@ class AdminUserController extends Controller
     }
 
     function edit($id){
-        $user = User::find($id);
+        $user = $this->userRepository->find($id);
         return view('admin.user.edit', compact('user'));
     }
     function update(Request $req, $id){
@@ -205,21 +196,26 @@ class AdminUserController extends Controller
                 'avatar'=>'Ảnh đại diện',
             ],
         );
+        $user = $this->userRepository->find($id);
         if(empty($req->file())){
-            $avatar = User::find($id)->avatar;
+            $avatar = $user->avatar;
         }else{
             $fileName = time().'.'.$req->avatar->extension();  
             $req->avatar->move(public_path("images"), $fileName);
             $avatar = $fileName;
         }
-        User::where('id', $id)->update([
+        $userUpdate = [
             'name' =>$req->input('name'),
-            'phone' =>$req->input('phone'),
             'gender' =>$req->input('gender'),
+            'phone' =>$req->input('phone'),
             'avatar' =>$avatar,
-        ]);
-        
-        return redirect('admin/user/list')->with('success', "Đã cập nhật thành công!");
+        ];
+        // dd($user->email);
+        if($this->userRepository->updateUser($id,$userUpdate)){
+            return redirect('admin/user/list')->with('success', "Đã cập nhật thành công!");
+        }else{
+            return redirect('admin/user/list')->with('success', "Đã cập nhật thành công!");
+        }
     }
 
 }

@@ -5,33 +5,27 @@ namespace App\Http\Controllers;
 use App\Models\Product;
 use App\Models\Brand;
 use App\Models\CategoryProduct;
+use App\Repositories\Product\ProductRepositoryInterface; 
 use Illuminate\Auth\Events\Validated;
 use Illuminate\Http\Request;
 use File;
 
 class AdminProductController extends Controller
 {
+    protected $productRepository;
+    public function __construct(ProductRepositoryInterface $productRepository)
+    {
+        $this->productRepository = $productRepository;
+    }
+    
     //action hiển thị danh sách các sản phẩm
     function index(Request $request, $status = "")
     {
-        //Lấy tất cả sản phẩm bao gồm cả những sản phẩm đã vô hiệu hóa
-        $all_pro = Product::withTrashed();
-
-        //Lấy tất cả sản phẩm đã vô hiệu hóa
-        $pro_remove = Product::onlyTrashed();
-
-        //Lấy tất cả sản phẩm đang hoạt động
-        $pro_active = Product::all();
-
         //Lấy id và tên các danh mục sản phẩm
         $catName = CategoryProduct::getCatName();
-        //đếm số lượng bản ghi các sản phẩm theo trạng thái 
-        $count = array(
-            "all_pro" => $all_pro->count(),
-            "pro_remove" => $pro_remove->count(),
-            "pro_active" => $pro_active->count(),
-        );
-
+        //đếm số lượng bản ghi các sản phẩm theo trạng thái
+        // dd($this->productRepository->count()); 
+        $count = $this->productRepository->count();
         if ($status == "del") {
             $list_act = [
                 'restore' => "Hiển thị",
@@ -40,7 +34,7 @@ class AdminProductController extends Controller
             $search = "";
             if ($request->input('keyword'))
                 $search = $request->input('keyword');
-            $products = $pro_remove->where('name', 'LIKE', "%{$search}%")->paginate(10);
+            $products = $this->productRepository->getProductRemove($search);
             //dd($users->total()); 
             return view("admin.product.list", compact("products", "count", "list_act", 'catName'));
         } else if ($status == "active") {
@@ -50,11 +44,11 @@ class AdminProductController extends Controller
             $search = "";
             if ($request->input('keyword'))
                 $search = $request->input('keyword');
-            $products = Product::where('name', 'LIKE', "%{$search}%")->paginate(10);
+            $products = $this->productRepository->getProductActive($search);
             // dd($users->total()); 
             return view("admin.product.list", compact("products", "count", "list_act", 'catName'));
         } else {
-            if ($pro_remove->count() != 0) {
+            if ($count['pro_remove'] != 0) {
                 $list_act = [
                     'restore' => "Hiển thị",
                     'remove' => "Ẩn sản phẩm",
@@ -68,8 +62,7 @@ class AdminProductController extends Controller
             $search = "";
             if ($request->input('keyword'))
                 $search = $request->input('keyword');
-            $products = $all_pro->where('name', 'LIKE', "%{$search}%")->paginate(10);
-            //dd($users->total()); 
+            $products = $this->productRepository->getAllProduct($search);
             return view("admin.product.list", compact("products", "count", "list_act", 'catName'));
         }
     }
@@ -106,16 +99,15 @@ class AdminProductController extends Controller
                 'quantity' => 'Số lượng',
                 'image' => 'Hình ảnh'
             ],
+            
         );
-
         if (empty($request->file())) {
             $image = 'image_blank.jpg';
         } else {
             $image = time() . '.' . $request->image->extension();
             $request->image->move(public_path("images"), $image);
         }
-
-        Product::create([
+        $product = [
             'product_code' => $request->input('product_code'),
             'name' => $request->input('name'),
             'description' => "'".$request->input('description')."'",
@@ -126,43 +118,40 @@ class AdminProductController extends Controller
             'product_detail' => $request->input('product_detail'),
             'cat_id' => $request->input('cat_id'),
             'brand_id' => $request->input('brand_id'),
-        ]);
+        ];
+        $this->productRepository->createProduct($product);
         return redirect('admin/product/list')->with('success', 'Thêm sản phẩm mới thành công!');
     }
 
     //Xóa hoàn toàn một sản phẩm khỏi hệ thống
     function delete($id)
     {
-        $pro = Product::onlyTrashed()->find($id);
-        if ($pro != null) {
-            $pro->forceDelete();
-            return redirect('admin/product/list')->with('success', "Bạn đã xóa vĩnh viễn thành viên!");
-        } else {
-            return redirect('admin/product/list')->with('danger', "Không xóa được sản phẩm đó!");
+        if($this->productRepository->deleteProduct($id)){
+            return redirect('admin/product/list')->with('success', "Xóa hoàn toàn sản phẩm thành công!");
+        }else{
+            return redirect('admin/product/list')->with('danger', "Xóa hoàn toàn sản phẩm không thành công!");
         }
     }
 
     //Vô hiệu hóa một sản phẩm
     function remove($id)
     {
-        $pro = Product::all()->find($id);
-        if ($pro != null) {
-            $pro->delete();
-            return redirect('admin/product/list')->with('success', "Bạn đã vô hiệu hóa thành viên thành công!");
-        } else {
-            return redirect('admin/product/list')->with('danger', "Không thể vô hiệu hóa sản phẩm đó!");
+        if($this->productRepository->removeProduct($id)){
+            return redirect('admin/product/list')->with('success', "Vô hiệu hóa sản phẩm thành công!");
+        }else{
+            return redirect('admin/product/list')->with('danger', "Vô hiệu hóa sản phẩm không thành công!");
+
         }
     }
 
     //Khôi phục một sản phẩm bị vô hiệu hóa
     function restore($id)
     {
-        $pro = Product::onlyTrashed()->find($id);
-        if ($pro != null) {
-            $pro->restore();
+        if($this->productRepository->restoreProduct($id)){
             return redirect('admin/product/list')->with('success', "Khôi phục sản phẩm thành công!");
-        } else {
-            return redirect('admin/product/list')->with('danger', "Không thể khôi phục sản phẩm đó!");
+        }else{
+            return redirect('admin/product/list')->with('danger', "Khôi phục sản phẩm không thành công!");
+
         }
     }
 
@@ -195,12 +184,11 @@ class AdminProductController extends Controller
             }
         }
     }
-
     function edit($id){
         $cats = new CategoryProduct();
         $brands = Brand::all();
         $cat_list = $cats->getParent();
-        $product = Product::find($id);
+        $product = $this->productRepository->find($id);
         return view('admin.product.edit', compact('product', 'cat_list', 'brands'));
     }
 
@@ -228,7 +216,7 @@ class AdminProductController extends Controller
                 'image' => 'Hình ảnh'
             ],
         );
-        $product = Product::find($id);
+        $product = $this->productRepository->find($id);
         if (empty($request->file())) {
             $image = $product->image;
         } else {
@@ -239,7 +227,7 @@ class AdminProductController extends Controller
             $request->image->move(public_path("images"), $image);
         }
 
-        $product->update([
+        $productUpdate = [
             'name' => $request->input('name'),
             'description' => $request->input('description'),
             'price' => $request->input('price'),
@@ -249,7 +237,8 @@ class AdminProductController extends Controller
             'product_detail' => $request->input('product_detail'),
             'cat_id' => $request->input('cat_id'),
             'brand_id' => $request->input('brand_id'),
-        ]);
+        ];
+        $this->productRepository->updateProduct($id, $productUpdate);
         return redirect('admin/product/list')->with('success', 'Thêm sản phẩm mới thành công!');
     }
 

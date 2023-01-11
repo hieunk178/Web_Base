@@ -6,6 +6,7 @@ use App\Http\Controllers\AdminUserController;
 use App\Http\Controllers\AdminProductController;
 use App\Http\Controllers\AdminBrandController;
 use App\Http\Controllers\RoleController;
+use App\Http\Controllers\AdminFeedbackController;
 use App\Http\Controllers\FileController;
 
 use Illuminate\Support\Facades\Route;
@@ -62,9 +63,6 @@ Route::middleware('auth')->group(function(){
     //Route thực hiện các nhiệm vụ trên nhiều bản ghi
     Route::get('/admin/user/action', [AdminUserController::class,'action']);
 
-    //Các route của amdin product 
-    Route::get('/admin/product/list',[AdminProductController::class, 'index'])->name('admin.product.list');
-
     //Các route categoryproductController
     Route::get('/admin/product/cat/list',[AdminCategoryProductController::class, 'index'])->name('admin.product.cat.list');
     Route::get('/admin/product/cat/list/{status}', [AdminCategoryProductController::class, 'index'])->name('admin.product.cat.list.status');
@@ -94,4 +92,8 @@ Route::middleware('auth')->group(function(){
     Route::get('/admin/product/action',[AdminProductController::class, 'action'])->name('admin.product.action');
     Route::get('/admin/product/edit/{id}',[AdminProductController::class, 'edit'])->name('admin.product.edit');
     Route::post('/admin/product/update/{id}',[AdminProductController::class, 'update'])->name('admin.product.update');
+
+    //Admin feedback controller
+    Route::get('/admin/feedback',[AdminFeedbackController::class, 'index'])->name('admin.feedback.list');
+    Route::get('/admin/feedback/list',[AdminFeedbackController::class, 'index'])->name('admin.feedback.list');
 });

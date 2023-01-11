@@ -28,7 +28,7 @@
             <div class="analytic">
                 <a href="{{route('list_user')}}" class="text-primary">Tất cả<span class="text-muted">({{$count['all_user']}})</span></a>
                 <a href="{{route('list_user_status', 'active')}}" class="text-primary">Hoạt động<span class="text-muted">({{$count['user_active']}})</span></a>
-                <a href="{{route('list_user_status', 'del')}}" class="text-primary">Vô hiệu hóa<span class="text-muted">({{$count['user_del']}})</span></a>
+                <a href="{{route('list_user_status', 'del')}}" class="text-primary">Vô hiệu hóa<span class="text-muted">({{$count['user_remove']}})</span></a>
             </div>
             <form action="{{url('admin/user/action')}}" method="">
 
