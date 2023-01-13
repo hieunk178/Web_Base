@@ -18,14 +18,4 @@ class Product extends Model
             return number_format($this->price, 0, '.', ',').' VND';
         }
     }
-    public function getStatus()
-    {
-        if ($this->quantity > 0) {
-            return "Còn hàng";
-        } else {
-            return 'Hết hàng';
-        }
-        return "Không xác định";
-    }
-    
 }

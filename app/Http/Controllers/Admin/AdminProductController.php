@@ -1,11 +1,11 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Admin;
 
+use App\Http\Controllers\Controller;
 use App\Models\Product;
 use App\Models\Brand;
-use App\Models\CategoryProduct;
-use App\Repositories\Product\ProductRepositoryInterface; 
+use App\Repositories\Product\ProductRepositoryInterface;
 use Illuminate\Auth\Events\Validated;
 use Illuminate\Http\Request;
 use File;
@@ -17,12 +17,10 @@ class AdminProductController extends Controller
     {
         $this->productRepository = $productRepository;
     }
-    
+
     //action hiển thị danh sách các sản phẩm
     function index(Request $request, $status = "")
     {
-        //Lấy id và tên các danh mục sản phẩm
-        $catName = CategoryProduct::getCatName();
         //đếm số lượng bản ghi các sản phẩm theo trạng thái
         // dd($this->productRepository->count()); 
         $count = $this->productRepository->count();
@@ -34,9 +32,9 @@ class AdminProductController extends Controller
             $search = "";
             if ($request->input('keyword'))
                 $search = $request->input('keyword');
-            $products = $this->productRepository->getProductRemove($search);
+            $products = $this->productRepository->getProduct("remove", $search);
             //dd($users->total()); 
-            return view("admin.product.list", compact("products", "count", "list_act", 'catName'));
+            return view("admin.product.list", compact("products", "count", "list_act"));
         } else if ($status == "active") {
             $list_act = [
                 'remove' => "Ẩn sản phẩm",
@@ -44,9 +42,9 @@ class AdminProductController extends Controller
             $search = "";
             if ($request->input('keyword'))
                 $search = $request->input('keyword');
-            $products = $this->productRepository->getProductActive($search);
+            $products = $this->productRepository->getProduct("active", $search);
             // dd($users->total()); 
-            return view("admin.product.list", compact("products", "count", "list_act", 'catName'));
+            return view("admin.product.list", compact("products", "count", "list_act"));
         } else {
             if ($count['pro_remove'] != 0) {
                 $list_act = [
@@ -62,17 +60,17 @@ class AdminProductController extends Controller
             $search = "";
             if ($request->input('keyword'))
                 $search = $request->input('keyword');
-            $products = $this->productRepository->getAllProduct($search);
-            return view("admin.product.list", compact("products", "count", "list_act", 'catName'));
+            $products = $this->productRepository->getProduct("", $search);
+            return view("admin.product.list", compact("products", "count", "list_act"));
         }
     }
 
 
     function create()
     {
-        $cats = new CategoryProduct();
-        $brands = Brand::all();
-        $cat_list = $cats->getParent();
+        $cat_list = $this->productRepository->getCatProductName();
+        $brands = $this->productRepository->getBrandName();
+        // dd($brands);
         return view('admin.product.create', compact('cat_list', 'brands'));
     }
 
@@ -99,7 +97,7 @@ class AdminProductController extends Controller
                 'quantity' => 'Số lượng',
                 'image' => 'Hình ảnh'
             ],
-            
+
         );
         if (empty($request->file())) {
             $image = 'image_blank.jpg';
@@ -110,7 +108,7 @@ class AdminProductController extends Controller
         $product = [
             'product_code' => $request->input('product_code'),
             'name' => $request->input('name'),
-            'description' => "'".$request->input('description')."'",
+            'description' => "'" . $request->input('description') . "'",
             'price' => $request->input('price'),
             'new_price' => $request->input('new_price'),
             'quantity' => $request->input('quantity'),
@@ -126,9 +124,9 @@ class AdminProductController extends Controller
     //Xóa hoàn toàn một sản phẩm khỏi hệ thống
     function delete($id)
     {
-        if($this->productRepository->deleteProduct($id)){
+        if ($this->productRepository->deleteProduct($id)) {
             return redirect('admin/product/list')->with('success', "Xóa hoàn toàn sản phẩm thành công!");
-        }else{
+        } else {
             return redirect('admin/product/list')->with('danger', "Xóa hoàn toàn sản phẩm không thành công!");
         }
     }
@@ -136,58 +134,57 @@ class AdminProductController extends Controller
     //Vô hiệu hóa một sản phẩm
     function remove($id)
     {
-        if($this->productRepository->removeProduct($id)){
+        if ($this->productRepository->removeProduct($id)) {
             return redirect('admin/product/list')->with('success', "Vô hiệu hóa sản phẩm thành công!");
-        }else{
+        } else {
             return redirect('admin/product/list')->with('danger', "Vô hiệu hóa sản phẩm không thành công!");
-
         }
     }
 
     //Khôi phục một sản phẩm bị vô hiệu hóa
     function restore($id)
     {
-        if($this->productRepository->restoreProduct($id)){
+        if ($this->productRepository->restoreProduct($id)) {
             return redirect('admin/product/list')->with('success', "Khôi phục sản phẩm thành công!");
-        }else{
+        } else {
             return redirect('admin/product/list')->with('danger', "Khôi phục sản phẩm không thành công!");
-
         }
     }
 
     //Hành động áp dụng hàng loạt
-    function action(Request $req){
+    function action(Request $req)
+    {
         $listcheck = $req->input('list_check');
 
-        if($listcheck != null){
-            if(!empty($listcheck)){
+        if ($listcheck != null) {
+            if (!empty($listcheck)) {
                 $act = $req->input('act');
                 //Thực hiện hành động ẩn các sản phẩm có id trong list_check
-                if($act == "remove"){
+                if ($act == "remove") {
                     Product::destroy($listcheck);
                     return redirect('admin/product/list')->with('success', "Các tài khoản đã ẩn thành công!",);
                 }
                 //Thực hiện hành động khôi phục các tài khoản có id trong list_check
-                if($act == 'restore'){
+                if ($act == 'restore') {
                     Product::onlyTrashed()
-                    ->whereIn('id', $listcheck)
-                    ->restore();
+                        ->whereIn('id', $listcheck)
+                        ->restore();
                     return redirect('admin/product/list')->with('success', "Các sản phẩm đã được hiển thị lại!");
                 }
                 //Thực hiện hành động xóa các sản phẩm có id trong list_check
-                if($act == 'delete'){
+                if ($act == 'delete') {
                     Product::onlyTrashed()
-                    ->whereIn('id', $listcheck)
-                    ->forceDelete();
+                        ->whereIn('id', $listcheck)
+                        ->forceDelete();
                     return redirect('admin/product/list')->with('success', "Các sản phẩm đã được xóa hoàn toàn!", 'alert', 'success');
                 }
             }
         }
     }
-    function edit($id){
-        $cats = new CategoryProduct();
-        $brands = Brand::all();
-        $cat_list = $cats->getParent();
+    function edit($id)
+    {
+        $cat_list = $this->productRepository->getCatProductName();
+        $brands = $this->productRepository->getBrandName();
         $product = $this->productRepository->find($id);
         return view('admin.product.edit', compact('product', 'cat_list', 'brands'));
     }
@@ -196,8 +193,8 @@ class AdminProductController extends Controller
     {
         $request->validate(
             [
-                'name' => 'required|string|max:255',
-                'price' => 'required|integer',
+                'name' => 'required | string | max:255',
+                'price' => 'required | integer',
                 'new_price' => 'integer',
                 'quantity' => 'required|integer',
                 'image' => 'mimes:jpg,png,gif|max:20000',
@@ -220,8 +217,8 @@ class AdminProductController extends Controller
         if (empty($request->file())) {
             $image = $product->image;
         } else {
-            if(File::exists(public_path('images/'.$product->image))){
-                File::delete(public_path('images/'.$product->image));
+            if (File::exists(public_path('images/' . $product->image))) {
+                File::delete(public_path('images/' . $product->image));
             }
             $image = time() . '.' . $request->image->extension();
             $request->image->move(public_path("images"), $image);
@@ -241,5 +238,4 @@ class AdminProductController extends Controller
         $this->productRepository->updateProduct($id, $productUpdate);
         return redirect('admin/product/list')->with('success', 'Thêm sản phẩm mới thành công!');
     }
-
 }

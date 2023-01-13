@@ -22,7 +22,7 @@
             <div class="analytic">
                 <a href="{{route('admin.product.cat.list')}}" class="text-primary">Tất cả<span class="text-muted">({{$count['all_cat']}})</span></a>
                 <a href="{{route('admin.product.cat.list.status', 'active')}}" class="text-primary">Hoạt động<span class="text-muted">({{$count['cat_active']}})</span></a>
-                <a href="{{route('admin.product.cat.list.status', 'del')}}" class="text-primary">Vô hiệu hóa<span class="text-muted">({{$count['cat_del']}})</span></a>
+                <a href="{{route('admin.product.cat.list.status', 'del')}}" class="text-primary">Vô hiệu hóa<span class="text-muted">({{$count['cat_remove']}})</span></a>
             </div>
             <form action="{{url('admin/user/action')}}" method="">
                 <div class="d-flex w-100 justify-content-between">

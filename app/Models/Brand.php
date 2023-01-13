@@ -8,7 +8,5 @@ use Illuminate\Database\Eloquent\Model;
 class Brand extends Model
 {
     public $timestamps = false;
-    protected $fillable = ['name','image','description'];
-    
-
+    protected $fillable = ['name', 'image', 'description'];
 }

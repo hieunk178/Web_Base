@@ -1,13 +1,12 @@
 <?php
 
-use App\Http\Controllers\AdminCategoryProductController;
-use App\Http\Controllers\DashboardController;
-use App\Http\Controllers\AdminUserController;
-use App\Http\Controllers\AdminProductController;
-use App\Http\Controllers\AdminBrandController;
+use App\Http\Controllers\Admin\AdminCategoryProductController;
+use App\Http\Controllers\Admin\DashboardController;
+use App\Http\Controllers\Admin\AdminUserController;
+use App\Http\Controllers\Admin\AdminProductController;
+use App\Http\Controllers\Admin\AdminBrandController;
 use App\Http\Controllers\RoleController;
-use App\Http\Controllers\AdminFeedbackController;
-use App\Http\Controllers\FileController;
+use App\Http\Controllers\Admin\AdminFeedbackController;
 
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Auth;
@@ -79,6 +78,7 @@ Route::middleware('auth')->group(function(){
     Route::get('/admin/brand',[AdminBrandController::class, 'index'])->name('admin.brand.show');
     Route::post('/admin/brand/store',[AdminBrandController::class, 'store'])->name('admin.brand.store');
     Route::get('/admin/brand/edit',[AdminBrandController::class, 'edit'])->name('admin.brand.edit');
+    Route::get('/admin/brand/delete/{id}',[AdminBrandController::class, 'delete'])->name('admin.brand.delete');
 
     //Các route của amdin product (sản phẩm)
     Route::get('/admin/product/list',[AdminProductController::class, 'index'])->name('admin.product.list');

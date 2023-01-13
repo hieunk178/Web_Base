@@ -72,13 +72,13 @@
                         <td>{{$count}}</td>
                         <td><img style="width:80px; height:80px" src="{{asset('images/'.$product->image)}}" alt=""></td>
                         <td><a href="#">{{$product->name}}</a></td>
-                        <td>{{$product->getPrice()}}</td>
-                        <td>{{$catName[$product->cat_id]}}</td>
+                        <td>{{number_format($product->price, 0, '.', ',').' VND'}}</td>
+                        <td>{{$product->cat_name}}</td>
                         <td>{{$product->created_at}}</td>
-                        @if($product->getStatus() == "Còn hàng")
-                        <td><span class="badge badge-success p-2">{{$product->getStatus()}}</span></td>
+                        @if($product->status == "Còn hàng")
+                        <td><span class="badge badge-success p-2">{{$product->status}}</span></td>
                         @else
-                        <td><span class="badge badge-danger p-2">{{$product->getStatus()}}</span></td>
+                        <td><span class="badge badge-danger p-2">{{$product->status}}</span></td>
                         @endif
                         <td>
                             @if($product->deleted_at == null)

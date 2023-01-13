@@ -31,7 +31,7 @@
                         </div>
                         <div class="form-group">
                             <label for="">Mô tả</label>
-                            <textarea name="description" id="description" class="form-control"></textarea>
+                            <textarea name="description" id="description" class="form-control" rows="8"></textarea>
                         </div>
                         <div class="form-group">
                             <label for="image">Ảnh minh họa</label>
@@ -81,7 +81,7 @@
                                 </td>
                                 <td>
                                     <button id="update_brand" data_id="{{$brand->id}}" class="btn btn-success btn-sm rounded-0 text-white" type="button" data-toggle="tooltip" data-placement="top" title="Edit"><i class="fa fa-edit"></i></button>
-                                    <button class="btn btn-danger btn-sm rounded-0 text-white" type="button" data-toggle="tooltip" data-placement="top" title="Delete"><i class="fa fa-trash"></i></button>
+                                    <a href="{{route('admin.brand.delete', $brand->id)}}" class="btn btn-danger btn-sm rounded-0 text-white" type="button" data-toggle="tooltip" data-placement="top" title="Delete"><i class="fa fa-trash"></i></a>
                                 </td>
                             </tr>
                             @endforeach
