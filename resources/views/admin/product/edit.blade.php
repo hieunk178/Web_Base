@@ -44,7 +44,7 @@
                     <div class="col-6">
                         <div class="form-group">
                             <label for="description">Mô tả sản phẩm</label>
-                            <textarea name="description" class="form-control" id="intro" cols="30" rows="8">{{$product->description}}</textarea>
+                            <textarea name="description" class="form-control" id="description" cols="30" rows="8">{{$product->description}}</textarea>
                         </div>
                     </div>
                 </div>

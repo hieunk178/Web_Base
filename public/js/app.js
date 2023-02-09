@@ -20,9 +20,21 @@ var loadFile = function (event) {
     }
 };
 
-tinymce.init({
-    selector: 'textarea#product_detail',
-    plugins: "link image code table advtable lists checklist",
-    toolbar: 'undo redo | styleselect | bold italic | alignleft aligncenter alignright alignjustify | outdent indent',
-    height: 500,
-});
+
+
+tinymce.init(
+    {
+        selector: 'textarea#description',
+        menubar:false,
+        toolbar: false,
+        height: 220,
+    }
+    );
+tinymce.init(
+    {
+        selector: 'textarea#product_detail',
+        plugins: "link image code table advtable lists checklist",
+        toolbar: 'undo redo | styleselect | bold italic | alignleft aligncenter alignright alignjustify | outdent indent',
+        height: 500,
+    }
+);

@@ -21,8 +21,6 @@ class AdminProductController extends Controller
     //action hiển thị danh sách các sản phẩm
     function index(Request $request, $status = "")
     {
-        //đếm số lượng bản ghi các sản phẩm theo trạng thái
-        // dd($this->productRepository->count()); 
         $count = $this->productRepository->count();
         if ($status == "del") {
             $list_act = [

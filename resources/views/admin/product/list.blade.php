@@ -18,8 +18,8 @@
             <h5 class="m-0 ">Danh sách sản phẩm</h5>
             <div class="form-search form-inline">
                 <form action="#">
-                    <input type="" class="form-control form-search" placeholder="Tìm kiếm">
-                    <input type="submit" name="btn-search" value="Tìm kiếm" class="btn btn-primary">
+                    <input type="text" name="keyword" class="form-control form-search" placeholder="Tìm kiếm">
+                    <input type="submit" class="btn btn-primary">
                 </form>
             </div>
         </div>
@@ -57,7 +57,7 @@
                     </tr>
                 </thead>
                 <tbody>
-                    {{-- @if($products->total() > 0) --}}
+                    @if($products->total() > 0)
                     @php
                     $count = 0;
                     @endphp
@@ -92,16 +92,16 @@
                         </td>
                     </tr>
                     @endforeach
-                    {{-- @else
+                    @else
                     <tr>
                         <td colspan="9">Không tìm thấy bản ghi nào</td>
                     </tr>
-                    @endif --}}
+                    @endif
                 </tbody>
             </table>
             </form>
             <div>
-                {{-- {{$products->links()}} --}}
+                {{$products->links()}}
             </div>
         </div>
     </div>

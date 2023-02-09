@@ -36,25 +36,24 @@ class CategoryRepository implements CategoryRepositoryInterface
     }
     public function getCategory($where = "", $search)
     {
-        $parentName = DB::raw("(SELECT 'name' FROM category_products WHERE category_products.id == id) as parent_name");
-        $cats = DB::table('category_products')
-            ->select(
-                'id',
-                'name',
-                'image',
-                'description',
-                'image',
-                $parentName,
-                'deleted_at'
-            )->get();
-        dd($cats);
-        if ($where == "active") {
-            $cats->where('deleted_at', null);
-        } elseif ($where == "remove") {
-            $cats->where('deleted_at', '!=', null);
-        }
-        // dd($Categorys);
-        return $cats->where('name', 'LIKE', "%{$search}%")->paginate(15);
+        // $parentName = DB::raw("(SELECT 'name' FROM category_products as cat WHERE cat.id = category_products.id_parent) as parent_name");
+        // $cats = DB::table('category_products')
+        //     ->select(
+        //         'id',
+        //         'name',
+        //         'image',
+        //         'description',
+        //         $parentName,
+        //         'deleted_at'
+        //     )->get();
+        // if ($where == "active") {
+        //     $cats->where('deleted_at', null);
+        // } elseif ($where == "remove") {
+        //     $cats->where('deleted_at', '!=', null);
+        // }
+        // // dd($Categorys);
+        // return $cats->where('name', 'LIKE', "%{$search}%")->paginate(15);
+        return DB::table('category_products')->where('name', 'LIKE', "%{$search}%")->paginate(15);
     }
     public function createCategory($Category)
     {
@@ -115,6 +114,22 @@ class CategoryRepository implements CategoryRepositoryInterface
     }
     public function getBrandName()
     {
-        return DB::table('category_Categorys')->select('id', 'name')->get();
+        return DB::table('brands')->select('id', 'name')->get();
+    }
+
+    //API
+    public function getCatMenu(){
+        $cat_list = DB::table('category_products')
+        ->select('id', 'name')
+        ->where('id_parent', 0)
+        ->where('id', '!=' , 1)
+        ->get();
+        foreach($cat_list as $item){
+            $subCat = DB::table('category_products')
+            ->select('id', 'name', 'image')
+            ->where('id_parent', $item->id)->get();
+            $item->subcat = $subCat;
+        }
+        return $cat_list;
     }
 }

@@ -51,14 +51,14 @@
                     <div class="col-6">
                         <div class="form-group">
                             <label for="description">Mô tả sản phẩm</label>
-                            <textarea name="description" class="form-control" id="intro" cols="30" rows="11"></textarea>
+                            <textarea id="description" name="description" class="form-control" cols="30" rows="11"></textarea>
                         </div>
                     </div>
                 </div>
 
 
                 <div class="form-group">
-                    <label for="intro">Chi tiết sản phẩm</label>
+                    <label for="product_detail">Chi tiết sản phẩm</label>
                     <textarea name="product_detail" class="form-control" id="product_detail" cols="30" rows="5"></textarea>
                 </div>
                 <div class="form-group">
