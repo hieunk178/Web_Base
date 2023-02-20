@@ -6,7 +6,7 @@
             Chỉnh sửa người dùng
         </div>
         <div class="card-body">
-            <form action="{{route('user.update', $user->id)}}" method="POST" enctype="multipart/form-data">
+            <form action="{{route('admin.user.update', $user->id)}}" method="POST" enctype="multipart/form-data">
                 @csrf
                 <div class="form-group">
                     <label for="name">Họ và tên</label>

@@ -13,6 +13,10 @@ class AdminBrandController extends Controller
     function __construct(BrandRepositoryInterface $BrandRepo)
     {
         $this->BrandRepo = $BrandRepo;
+        $this->middleware(function($request, $next){
+            session(['module_active' => 'brand']);
+            return $next($request);
+        });
     }
     function index(){
         $brands = $this->BrandRepo->getAll();

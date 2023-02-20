@@ -13,6 +13,10 @@ class AdminCategoryProductController extends Controller
     function __construct(CategoryRepositoryInterface $categoryRepo)
     {
         $this->categoryRepo = $categoryRepo;
+        $this->middleware(function($request, $next){
+            session(['module_active' => 'category']);
+            return $next($request);
+        });
     }
     //action hiển thị danh sách các danh mục sản phẩm
     function index(Request $request, $status = "")

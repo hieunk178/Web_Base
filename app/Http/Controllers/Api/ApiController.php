@@ -3,13 +3,11 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
-use App\Models\CategoryProduct;
-use App\Models\Product;
 use Illuminate\Http\Request;
 use App\Repositories\Product\ProductRepositoryInterface;
 use App\Repositories\Slider\SliderRepository;
 use App\Repositories\CategoryProduct\CategoryRepository;
-use Exception;
+use App\Repositories\Brand\BrandRepositoryInterface;
 
 class ApiController extends Controller
 {
@@ -21,19 +19,21 @@ class ApiController extends Controller
     private $productRepo;
     private $sliderRepo;
     private $catRepo;
-    public function __construct(ProductRepositoryInterface $productRepo, SliderRepository $sliderRepo, CategoryRepository $catRepo)
+    private $brandRepo;
+    public function __construct(ProductRepositoryInterface $productRepo, SliderRepository $sliderRepo, CategoryRepository $catRepo, BrandRepositoryInterface $brandRepo)
     {
         $this->productRepo = $productRepo;
         $this->sliderRepo = $sliderRepo;
         $this->catRepo = $catRepo;
+        $this->brandRepo = $brandRepo;
     }
 
     /**
      * Show the application dashboard.
      *
-     * @return \Illuminate\Contracts\Support\Renderable
+     * @return \Illuminate\Http\JsonResponse
      */
-    
+
     public function index(){
         $sliders = $this->sliderRepo->getAllSlider();
         $sellingProducts = $this->productRepo->getSellingProducts();
@@ -48,7 +48,7 @@ class ApiController extends Controller
             ]
         );
     }
-    
+
     public function getCatMenu(){
         $data = $this->catRepo->getCatMenu();
         return response()->json(
@@ -58,8 +58,8 @@ class ApiController extends Controller
         );
     }
 
-    public function productDetail($id){
-        $product = $this->productRepo->find($id);
+    public function productDetail($code){
+        $product = $this->productRepo->findByCode($code);
         return response()->json([
             "product"=> $product,
         ]);
@@ -71,21 +71,14 @@ class ApiController extends Controller
             'products' => $products
         ]);
     }
-    public function productAll(Request $request){
-        $products = \DB::table('products')
-        ->select('id', 'name', 'image', 'price', 'new_price')
-        ->paginate(16);
-        $categorys = \DB::table('category_products')
-        ->select('id', 'name')
-        ->get();
-        $brands = \DB::table('brands')
-        ->select('id', 'name')
-        ->get();
+    public function listProduct(Request $request){
+        $products = $this->productRepo->getProductFilter($request->all());
+        $categorys = $this->catRepo->getCatName();
+        $brands = $this->brandRepo->getBrandName();
         return response()->json([
             'categorys' => $categorys,
             'brands' => $brands,
             'products' => $products
-
         ]);
     }
 }

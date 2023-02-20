@@ -5,7 +5,7 @@ use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\AdminUserController;
 use App\Http\Controllers\Admin\AdminProductController;
 use App\Http\Controllers\Admin\AdminBrandController;
-use App\Http\Controllers\RoleController;
+use App\Http\Controllers\Admin\RoleController;
 use App\Http\Controllers\Admin\AdminFeedbackController;
 
 use Illuminate\Support\Facades\Route;
@@ -23,77 +23,75 @@ use SebastianBergmann\CodeCoverage\Report\Html\Dashboard;
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
-});
-
 Auth::routes();
 
-Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
+// Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
 
 //Nhóm route xử lý trên addmin
-Route::middleware('auth')->group(function(){
+Route::middleware('auth')->group(function () {
+    Route::prefix('admin')->group(function () {
+        Route::get('/', [DashboardController::class, 'show']);
+        Route::get('dashboard', [DashboardController::class, 'show'])->name('admin.dashboard');
+        Route::prefix('role')->group(function () {
+            Route::get('/', [RoleController::class, 'index']);
+            Route::get('role', [RoleController::class, 'index'])->name('admin.role.index');
+            Route::get('create', [RoleController::class, 'create'])->name('admin.role.create');
+            Route::post('store', [RoleController::class, 'store'])->name('admin.role.store');
+            Route::get('listRoute', [RoleController::class, 'listRoute'])->name('admin.role.listRoute');
+        });
+        Route::get('brand/show', [AdminBrandController::class, 'index'])->name('admin.brand.show');
+        Route::prefix('user')->group(function () {
+            Route::get('/', [AdminUserController::class, 'list']);
+            Route::get('list', [AdminUserController::class, 'list'])->name('admin.user.list');
+            Route::get('list/{status}', [AdminUserController::class, 'list'])->name('admin.user.status');
+            Route::get('create', [AdminUserController::class, 'create'])->name('admin.user.create');
+            Route::post('store', [AdminUserController::class, 'store'])->name('admin.user.store');
+            Route::get('action', [AdminUserController::class, 'action'])->name('admin.user.action');
+            Route::get('edit/{id}', [AdminUserController::class, 'edit'])->name('admin.user.edit');
+            Route::post('update/{id}', [AdminUserController::class, 'update'])->name('admin.user.update');
+            Route::get('remove/{id}', [AdminUserController::class, 'remove'])->name('admin.user.remove');
+            Route::get('restore/{id}', [AdminUserController::class, 'restore'])->name('admin.user.restore');
+            Route::get('delete/{id}', [AdminUserController::class, 'delete'])->name('admin.user.delete');
+        });
+        Route::prefix('product')->group(function () {
+            //Các route categoryproductController
+            Route::prefix('cat')->group(function () {
+                Route::get('list', [AdminCategoryProductController::class, 'index'])->name('admin.product.cat.list');
+                Route::get('/', [AdminCategoryProductController::class, 'index']);
+                Route::get('list/{status}', [AdminCategoryProductController::class, 'index'])->name('admin.product.cat.list.status');
+                Route::get('create', [AdminCategoryProductController::class, 'create'])->name('admin.product.cat.create');
+                Route::post('store', [AdminCategoryProductController::class, 'store'])->name('admin.product.cat.store');
+                Route::get('remove/{id}', [AdminCategoryProductController::class, 'remove'])->name('admin.product.cat.remove');
+                Route::get('restore/{id}', [AdminCategoryProductController::class, 'restore'])->name('admin.product.cat.restore');
+                Route::get('delete/{id}', [AdminCategoryProductController::class, 'delete'])->name('admin.product.cat.delete');
+                Route::get('edit/{id}', [AdminCategoryProductController::class, 'edit'])->name('admin.product.cat.edit');
+                Route::post('update/{id}', [AdminCategoryProductController::class, 'update'])->name('admin.product.cat.update');
+            });
+            Route::get('/', [AdminProductController::class, 'index'])->name('admin.product.list');
+            Route::get('list', [AdminProductController::class, 'index'])->name('admin.product.list');
+            Route::get('list/{status}', [AdminProductController::class, 'index'])->name('admin.product.list.status');
+            Route::get('create', [AdminProductController::class, 'create'])->name('admin.product.create');
+            Route::post('store', [AdminProductController::class, 'store'])->name('admin.product.store');
 
-    //Các route của amdin role(phân quyền)
-    Route::get('/admin/role', [RoleController::class, 'index']);
-    Route::get('/admin/role/create', [RoleController::class, 'create']);
-    Route::post('/admin/role/store', [RoleController::class, 'store'])->name('admin.role.store');
-
-    //Các route của amdin post(bài viết)
-    Route::get('/admin/brand/show',[AdminBrandController::class, 'index'])->name('admin.brand.show');
-
-    Route::get('/admin/dashboard', [DashboardController::class, 'show'])->name('admin.dashboard');
-    Route::get('/admin', [DashboardController::class, 'show']);
-    
-    //Các route hiển thị danh sách user
-    Route::get('/admin/user/list', [AdminUserController::class, 'list'])->name('list_user');
-    Route::get('/admin/user/list/{status}', [AdminUserController::class, 'list'])->name('list_user_status');
-    Route::get('/admin/user', [AdminUserController::class,'list'])->name('user.list');
-    
-    //Các route thực hiện các nhiệm vụ thêm, sửa, xóa, vô hiệu hóa, khôi phục user
-    Route::get('/admin/user/create', [AdminUserController::class,'create']);
-    Route::post('/admin/user/store', [AdminUserController::class,'store']);
-    Route::get('/admin/user/remove/{id}', [AdminUserController::class,'remove'])->name('remove_user');
-    Route::get('/admin/user/restore/{id}', [AdminUserController::class,'restore'])->name('restore_user');
-    Route::get('/admin/user/delete/{id}', [AdminUserController::class,'delete'])->name('delete_user');
-    Route::get('/admin/user/edit/{id}', [AdminUserController::class, 'edit'])->name('user.edit');
-    Route::post('/admin/user/update/{id}', [AdminUserController::class, 'update'])->name('user.update');
-
-    //Route thực hiện các nhiệm vụ trên nhiều bản ghi
-    Route::get('/admin/user/action', [AdminUserController::class,'action']);
-
-    //Các route categoryproductController
-    Route::get('/admin/product/cat/list',[AdminCategoryProductController::class, 'index'])->name('admin.product.cat.list');
-    Route::get('/admin/product/cat/list/{status}', [AdminCategoryProductController::class, 'index'])->name('admin.product.cat.list.status');
-    Route::get('/admin/product/cat', [AdminCategoryProductController::class,'index'])->name('user.list');
-    Route::get('/admin/product/cat/create',[AdminCategoryProductController::class, 'create'])->name('admin.product.cat.create');
-    Route::post('/admin/product/cat/store',[AdminCategoryProductController::class, 'store'])->name('admin.product.cat.store');
-    Route::get('/admin/product/cat/remove/{id}', [AdminCategoryProductController::class,'remove'])->name('admin.product.cat.remove');
-    Route::get('/admin/product/cat/restore/{id}', [AdminCategoryProductController::class,'restore'])->name('admin.product.cat.restore');
-    Route::get('/admin/product/cat/delete/{id}', [AdminCategoryProductController::class,'delete'])->name('admin.product.cat.delete');
-    Route::get('/admin/product/cat/edit/{id}', [AdminCategoryProductController::class, 'edit'])->name('admin.product.cat.edit');
-    Route::post('/admin/product/cat/update/{id}', [AdminCategoryProductController::class, 'update'])->name('admin.product.cat.update');
-    
-    //Các route của amdin brand(thương hiệu)
-    Route::get('/admin/brand',[AdminBrandController::class, 'index'])->name('admin.brand.show');
-    Route::post('/admin/brand/store',[AdminBrandController::class, 'store'])->name('admin.brand.store');
-    Route::get('/admin/brand/edit',[AdminBrandController::class, 'edit'])->name('admin.brand.edit');
-    Route::get('/admin/brand/delete/{id}',[AdminBrandController::class, 'delete'])->name('admin.brand.delete');
-
-    //Các route của amdin product (sản phẩm)
-    Route::get('/admin/product/list',[AdminProductController::class, 'index'])->name('admin.product.list');
-    Route::get('/admin/product/list/{status}',[AdminProductController::class, 'index'])->name('admin.product.list.status');
-    Route::get('/admin/product/create',[AdminProductController::class, 'create'])->name('admin.product.create');
-    Route::post('/admin/product/store',[AdminProductController::class, 'store'])->name('admin.product.store');
-
-    Route::get('/admin/product/remove/{id}',[AdminProductController::class, 'remove'])->name('admin.product.remove');
-    Route::get('/admin/product/restore/{id}',[AdminProductController::class, 'restore'])->name('admin.product.restore');
-    Route::get('/admin/product/delete/{id}',[AdminProductController::class, 'delete'])->name('admin.product.delete');
-    Route::get('/admin/product/action',[AdminProductController::class, 'action'])->name('admin.product.action');
-    Route::get('/admin/product/edit/{id}',[AdminProductController::class, 'edit'])->name('admin.product.edit');
-    Route::post('/admin/product/update/{id}',[AdminProductController::class, 'update'])->name('admin.product.update');
-
-    //Admin feedback controller
-    Route::get('/admin/feedback',[AdminFeedbackController::class, 'index'])->name('admin.feedback.list');
-    Route::get('/admin/feedback/list',[AdminFeedbackController::class, 'index'])->name('admin.feedback.list');
+            Route::get('remove/{id}', [AdminProductController::class, 'remove'])->name('admin.product.remove');
+            Route::get('restore/{id}', [AdminProductController::class, 'restore'])->name('admin.product.restore');
+            Route::get('delete/{id}', [AdminProductController::class, 'delete'])->name('admin.product.delete');
+            Route::get('action', [AdminProductController::class, 'action'])->name('admin.product.action');
+            Route::get('edit/{id}', [AdminProductController::class, 'edit'])->name('admin.product.edit');
+            Route::post('update/{id}', [AdminProductController::class, 'update'])->name('admin.product.update');
+        });
+        Route::prefix('brand')->group(function () {
+            Route::get('brand', [AdminBrandController::class, 'index'])->name('admin.brand.show');
+            Route::post('store', [AdminBrandController::class, 'store'])->name('admin.brand.store');
+            Route::get('edit', [AdminBrandController::class, 'edit'])->name('admin.brand.edit');
+            Route::get('delete/{id}', [AdminBrandController::class, 'delete'])->name('admin.brand.delete');
+        });
+        Route::prefix('feeback')->group(function () {
+            Route::get('/', [AdminFeedbackController::class, 'index']);
+            Route::get('list', [AdminFeedbackController::class, 'index'])->name('admin.feedback.list');
+        });
+    });
+    Route::get('/', function () {
+        return view('admin.dashboard');
+    });
 });

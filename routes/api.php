@@ -3,6 +3,9 @@
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Api\ApiController;
+use App\Http\Controllers\Api\ApiAuthController;
+
+use App\Http\Controllers\Admin\RoleController;
 
 /*
 |--------------------------------------------------------------------------
@@ -15,13 +18,16 @@ use App\Http\Controllers\Api\ApiController;
 |
 */
 
-Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
-    return $request->user();
-});
-
+// Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
+//     return $request->user();
+// });
+Auth::routes();
 Route::get('home', [ApiController::class, 'index'])->name('api.home');
-Route::get('product/{id}', [ApiController::class, 'productDetail'])->name('api.product.detail');
+Route::get('product/{code}', [ApiController::class, 'productDetail'])->name('api.product.detail');
 Route::get('product/same_category/{cat_id}', [ApiController::class, 'sameCategory'])->name('api.product.same_category');
 Route::get('cat_menu', [ApiController::class, 'getCatMenu'])->name('api.getCatMenu');
-Route::get('product', [ApiController::class, 'productAll'])->name('api.product.productAll');
+Route::get('product', [ApiController::class, 'listProduct'])->name('api.product.productAll');
 
+
+Route::post('register', [ApiAuthController::class, 'register'])->name('api.register');
+Route::post('login', [ApiAuthController::class, 'login'])->name('api.login');

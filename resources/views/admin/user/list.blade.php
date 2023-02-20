@@ -26,9 +26,9 @@
         </div>
         <div class="card-body">
             <div class="analytic">
-                <a href="{{route('list_user')}}" class="text-primary">Tất cả<span class="text-muted">({{$count['all_user']}})</span></a>
-                <a href="{{route('list_user_status', 'active')}}" class="text-primary">Hoạt động<span class="text-muted">({{$count['user_active']}})</span></a>
-                <a href="{{route('list_user_status', 'del')}}" class="text-primary">Vô hiệu hóa<span class="text-muted">({{$count['user_remove']}})</span></a>
+                <a href="{{route('admin.user.list')}}" class="text-primary">Tất cả<span class="text-muted">({{$count['all_user']}})</span></a>
+                <a href="{{route('admin.user.status', 'active')}}" class="text-primary">Hoạt động<span class="text-muted">({{$count['user_active']}})</span></a>
+                <a href="{{route('admin.user.status', 'del')}}" class="text-primary">Vô hiệu hóa<span class="text-muted">({{$count['user_remove']}})</span></a>
             </div>
             <form action="{{url('admin/user/action')}}" method="">
 
@@ -69,15 +69,15 @@
                             <td>{{$user->created_at}}</td>
                             <td>
                                 @if($user->deleted_at == null)
-                                <a href="{{route('user.edit', $user->id)}}" class="btn btn-success btn-sm rounded-0 text-white" type="button" data-toggle="tooltip" data-placement="top" title="Edit"><i class="fa fa-edit"></i></a>
+                                <a href="{{route('admin.user.edit', $user->id)}}" class="btn btn-success btn-sm rounded-0 text-white" type="button" data-toggle="tooltip" data-placement="top" title="Edit"><i class="fa fa-edit"></i></a>
                                 @if($user->id != Auth::id())
-                                <a href="{{ route('remove_user', $user->id) }}" onclick="return confirm('Bạn có chắc chắn muốn vô hiệu hóa tài khoản này không?')" class="btn btn-success btn-sm rounded-0 text-white" type="button" data-toggle="tooltip" data-placement="top" title="Vô hiệu hóa"><i class="fa-solid fa-eye"></i></a>
+                                <a href="{{ route('admin.user.remove', $user->id) }}" onclick="return confirm('Bạn có chắc chắn muốn vô hiệu hóa tài khoản này không?')" class="btn btn-success btn-sm rounded-0 text-white" type="button" data-toggle="tooltip" data-placement="top" title="Vô hiệu hóa"><i class="fa-solid fa-eye"></i></a>
                                 @endif
                                 @else
                                 @if($user->id != Auth::id())
-                                <a href="{{ route('restore_user', $user->id) }}" onclick="return confirm('Bạn có muốn khởi động lại tài khoản này không?')" class="btn btn-warning btn-sm rounded-0 text-white" type="button" data-toggle="tooltip" data-placement="top" title="Khôi phục"><i class="fa-solid fa-eye-slash"></i></a>
+                                <a href="{{ route('admin.user.restore', $user->id) }}" onclick="return confirm('Bạn có muốn khởi động lại tài khoản này không?')" class="btn btn-warning btn-sm rounded-0 text-white" type="button" data-toggle="tooltip" data-placement="top" title="Khôi phục"><i class="fa-solid fa-eye-slash"></i></a>
                                 @endif
-                                <a href="{{ route('delete_user', $user->id) }}" class="btn btn-danger btn-sm rounded-0 text-white" type="button" data-toggle="tooltip" data-placement="top" title="Xóa vĩnh viễn"><i class="fa-solid fa-trash"></i></a>
+                                <a href="{{ route('admin.user.delete', $user->id) }}" class="btn btn-danger btn-sm rounded-0 text-white" type="button" data-toggle="tooltip" data-placement="top" title="Xóa vĩnh viễn"><i class="fa-solid fa-trash"></i></a>
                                 @endif
                             </td>
                         </tr>

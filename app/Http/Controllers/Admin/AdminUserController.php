@@ -6,7 +6,6 @@ use App\Http\Controllers\Controller;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Hash;
 use App\Repositories\User\UserRepositoryInterface;
 
 class AdminUserController extends Controller
@@ -23,7 +22,7 @@ class AdminUserController extends Controller
     }
 
     function list(Request $request, $status=""){
-        
+
         $count = $this->userRepository->count();
         if($status == "del"){
             $list_act = [
@@ -34,7 +33,7 @@ class AdminUserController extends Controller
             if($request->input('keyword'))
                 $search = $request->input('keyword');
             $users = $this->userRepository->getUserRemove($search);
-            //dd($users->total()); 
+            //dd($users->total());
             return view("admin.user.list", compact("users", "count", "list_act"));
         }else if($status == "active"){
             $list_act = [
@@ -44,7 +43,7 @@ class AdminUserController extends Controller
             if($request->input('keyword'))
                 $search = $request->input('keyword');
             $users = $this->userRepository->getUserActive($search);
-            // dd($users->total()); 
+            // dd($users->total());
             return view("admin.user.list", compact("users", "count", "list_act"));
         }else{
             if($count['user_remove'] != 0){
@@ -62,7 +61,7 @@ class AdminUserController extends Controller
             if($request->input('keyword'))
                 $search = $request->input('keyword');
             $users = $this->userRepository->getAllUser($search);
-            //dd($users->total()); 
+            //dd($users->total());
             return view("admin.user.list", compact("users", "count", "list_act"));
         }
     }
@@ -71,45 +70,8 @@ class AdminUserController extends Controller
         return view('admin.user.create');
     }
 
-    function store(Request $req){
-        $req->validate(
-            [
-                'name'=> 'required|string|max:255',
-                'email'=>'required|string|email|max:255|unique:users',
-                'password'=> 'required|string|min:8|confirmed',
-                'avatar' => 'mimes:jpg,png,gif|max:20000',
-            ],
-            [
-                'required'=> ':attribute không được bỏ trống!',
-                'min'=> ':attribute có độ dài ít nhất :min ký tự!',
-                'max'=> ':attribute có độ dài lớn nhất :max ký tự!',
-                'confirmed'=> 'Xác nhận mật khẩu không thành công!',
-                'unique'=> ':attribute đã được sử dụng',
-                'mimes'=> ':attribute phải có định dạng jpg, png, gif!',
-            ],
-            [
-                'name'=>'Tên người dùng',
-                'email'=>'Email',
-                'password'=>'Mật khẩu',
-                'avatar'=>'Ảnh đại diện',
-            ],
-        );
-        if(empty($req->file())){
-            $avatar = 'user-blank.png';
-        }else{
-            $fileName = time().'.'.$req->avatar->extension();  
-            $req->avatar->move(public_path("images"), $fileName);
-            $avatar = $fileName;
-        }
-        $user = [
-            'name' =>$req->input('name'),
-            'email' =>$req->input('email'),
-            'gender' =>$req->input('gender'),
-            'phone' =>$req->input('phone'),
-            'password' => Hash::make($req->input('password')),
-            'avatar' =>$avatar,
-        ];
-        $this->userRepository->create($user);
+    function store(Request $request){
+        $this->userRepository->create($request);
         return redirect('admin/user/list')->with('success', 'Đã thêm một người dùng mới!', 'alert', 'success');
     }
 
@@ -202,7 +164,7 @@ class AdminUserController extends Controller
         if(empty($req->file())){
             $avatar = $user->avatar;
         }else{
-            $fileName = time().'.'.$req->avatar->extension();  
+            $fileName = time().'.'.$req->avatar->extension();
             $req->avatar->move(public_path("images"), $fileName);
             $avatar = $fileName;
         }

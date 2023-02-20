@@ -6,9 +6,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
     
+    <link rel="icon" type="image/png" sizes="16x16" href="{{asset('images/logo.png')}}">
     <link rel="stylesheet" href="{{asset('css/fontawesome.min.css')}}">
     <link rel="stylesheet" href="{{asset('css/style.css')}}">
-    <title>Admintrator</title>
+    <title>Quản trị cửa hàng</title>
 </head>
 
 <body>
@@ -60,8 +61,8 @@
                             Dashboard
                         </a>
                     </li>
-                    <li class="nav-link {{$module_active == 'page' ? 'active': ''}}">
-                        <a href="{{url('/admin/page/list')}}">
+                    <li class="nav-link {{$module_active == 'pages' ? 'active': ''}}">
+                        <a href="{{url('/admin/page')}}">
                             <div class="nav-link-icon d-inline-flex">
                             <i class="fa-solid fa-layer-group"></i>
                             </div>
@@ -88,7 +89,7 @@
                         </ul>
                     </li>
                     <li class="nav-link {{$module_active == 'product' ? 'active': ''}}">
-                        <a href="{{url('/admin/product/list')}}">
+                        <a href="{{url('/admin/product')}}">
                             <div class="nav-link-icon d-inline-flex">
                                 <i class="fas fa-gears"></i>
                             </div>
@@ -142,18 +143,27 @@
                             <li><a href="{{url('admin/user/list')}}">Danh sách</a></li>
                         </ul>
                     </li>
-
-                    <!-- <li class="nav-link"><a>Bài viết</a>
+                    <li class="nav-link {{$module_active == 'roles' ? 'active': ''}}">
+                        <a href="{{url('/admin/role')}}">
+                            <div class="nav-link-icon d-inline-flex">
+                                <i class="fa-duotone fa-user-group"></i>
+                            </div>
+                            Nhóm phân quyền
+                        </a>
+                        <i class="arrow fas fa-angle-right"></i>
                         <ul class="sub-menu">
-                            <li><a>Thêm mới</a></li>
-                            <li><a>Danh sách</a></li>
-                            <li><a>Thêm danh mục</a></li>
-                            <li><a>Danh sách danh mục</a></li>
+                            <li><a href="{{url('/admin/page/add')}}">Thêm mới</a></li>
+                            <li><a href="{{url('/admin/page/list')}}">Danh sách</a></li>
                         </ul>
                     </li>
-                    <li class="nav-link"><a>Sản phẩm</a></li>
-                    <li class="nav-link"><a>Đơn hàng</a></li>
-                    <li class="nav-link"><a>Hệ thống</a></li> -->
+                    <li class="nav-link">
+                        <a>
+                            <div class="nav-link-icon d-inline-flex">
+                            <i class="fa-light fa-solar-system"></i>
+                        </div>
+                        Hệ thống
+                        </a>
+                    </li>
 
                 </ul>
             </div>

@@ -50,4 +50,9 @@ class BrandRepository implements BrandRepositoryInterface
     public function total(){
         return $this->Brand->total();
     }
+
+    public function getBrandName()
+    {
+        return \DB::table('brands')->select('id', 'name')->get();
+    }
 }

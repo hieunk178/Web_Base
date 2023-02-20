@@ -43,6 +43,12 @@ class ProductRepository implements ProductRepositoryInterface
 
         return $result;
     }
+    public function findByCode($code)
+    {
+        $result = $this->product->where('product_code', $code)->first();
+
+        return $result;
+    }
     public function getProduct($where = "", $search)
     {
         $status = DB::raw("(CASE WHEN products.quantity = 0 THEN 'Hết hàng' ELSE 'Còn hàng' END) as status");
@@ -50,13 +56,14 @@ class ProductRepository implements ProductRepositoryInterface
             ->join('category_products', 'category_products.id', 'products.cat_id')
             ->select(
                 'products.id',
-                'products.name', 
-                'products.image', 
-                $this->price, 
-                'category_products.name as cat_name', 
-                $status, 
-                'products.created_at', 
-                'products.deleted_at');
+                'products.name',
+                'products.image',
+                $this->price,
+                'category_products.name as cat_name',
+                $status,
+                'products.created_at',
+                'products.deleted_at'
+            );
         if ($where == "active") {
             $products->where('products.deleted_at', null);
         } elseif ($where == "remove") {
@@ -77,18 +84,19 @@ class ProductRepository implements ProductRepositoryInterface
             }
         } else {
             $this->data = DB::table('products')
-            ->select(
-                'id',
-                'name',
-                'price',
-                'new_price',
-                'image'
-            )
-            ->where('cat_id', $id)
-            ->where('deleted_at', null)
-            ->inRandomOrder()
-            ->limit(12)
-            ->get()->toArray();
+                ->select(
+                    'id',
+                    'product_code',
+                    'name',
+                    'price',
+                    'new_price',
+                    'image'
+                )
+                ->where('cat_id', $id)
+                ->where('deleted_at', null)
+                ->inRandomOrder()
+                ->limit(12)
+                ->get()->toArray();
         }
         return $this->data;
     }
@@ -102,7 +110,7 @@ class ProductRepository implements ProductRepositoryInterface
         $data = [];
         foreach ($cat as $item) {
             $data[$item->id] = [
-                "cat_name"=> $item->name,
+                "cat_name" => $item->name,
                 "product" => $this->getProductByCatId($item->id)
             ];
             $this->data = [];
@@ -115,6 +123,7 @@ class ProductRepository implements ProductRepositoryInterface
         return DB::table('products')
             ->select(
                 'id',
+                'product_code',
                 'name',
                 'price',
                 'new_price',
@@ -197,5 +206,58 @@ class ProductRepository implements ProductRepositoryInterface
             $list[$item->name] = DB::table('products')->where('cat_id', $item->id)->limit(5)->get();
         }
         return $list;
+    }
+
+    //API
+    public function getProductFilter($filters)
+    {
+        $products = DB::table('products')
+            ->select('id','product_code', 'name', 'image', 'price', 'new_price', 'cat_id');
+        if (!empty($filters['nganh_hang'])) {
+            $products->where('cat_id', $filters['nganh_hang']);
+        };
+        if (!empty($filters['thuong_hieu'])) {
+            $products->where('brand_id', $filters['thuong_hieu']);
+        };
+        if (!empty($filters['gia'])) {
+            switch ($filters['gia']) {
+                case "1":
+                    $products->whereRaw('IF(new_price = 0, price, new_price)< 1000000');
+                    break;
+                case "1-3":
+                    $products->whereRaw('IF(new_price = 0, price, new_price) BETWEEN 1000000 AND 3000000');
+                    break;
+                case "3-5":
+                    $products->whereRaw('IF(new_price = 0, price, new_price) BETWEEN 3000000 AND 5000000');
+                    break;
+                case "5-10":
+                    $products->whereRaw('IF(new_price = 0, price, new_price) BETWEEN 5000000 AND 10000000');
+                    break;
+                case "10":
+                    $products->whereRaw('IF(new_price = 0, price, new_price) > 10000000');
+                    break;
+                default:
+                    break;
+            }
+        };
+        if (!empty($filters['sap_xep'])) {
+            switch ($filters['sap_xep']) {
+                case "1":
+                    $products->orderByDesc('created_at');
+                    break;
+                case "2":
+                    $products->orderBy('created_at');
+                    break;
+                case "3":
+                    $products->orderBy('price');
+                    break;
+                case "4":
+                    $products->orderByDesc('price');
+                    break;
+                default:
+                    break;
+            }
+        }
+        return $products->paginate(16);
     }
 }

@@ -1,5 +1,6 @@
 @extends('layouts/admin')
 @section('content')
+<div id="content" class="container-fluid">
 <div class="card">
     @if(session('success'))
     <div class="alert alert-success">{{session('success')}}</div>
@@ -8,7 +9,7 @@
     <div class="alert alert-danger">{{session('danger')}}</div>
     @endif
     <div class="card-header font-weight-bold d-flex justify-content-between align-items-center">
-        <h5 class="m-0 ">Danh sách thành viên</h5>
+        <h5 class="m-0 ">Danh sách phân quyền</h5>
         <div class="form-search form-inline">
             <form action="">
                 <input type="" class="form-control form-search" name="keyword" placeholder="Tìm kiếm" value="{{request()->input('keyword')}}">
@@ -24,9 +25,9 @@
                         <th>
                             <input type="checkbox" name="checkall">
                         </th>
-                        <th scope="col">Id</th>
-                        <th scope="col">Name</th>
-                        <th scope="col"></th>
+                        <th scope="col" class="col-1">ID</th>
+                        <th scope="col" class="col-8">Name</th>
+                        <th scope="col" class="col-2">Action</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -49,6 +50,7 @@
         {{ $data->links() }}
 
     </div>
+</div>
 </div>
 </div>
 

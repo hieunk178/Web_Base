@@ -8,6 +8,14 @@ use App\Models\Comment;
 
 class AdminFeedbackController extends Controller
 {
+    function __construct()
+    {
+        $this->middleware(function($request, $next){
+            session(['module_active' => 'feedback']);
+            return $next($request);
+        });
+    }
+
     function index(Request $request, $status = "")
     {
         //Lấy tất cả bình luận bao gồm cả những bình luận đã vô hiệu hóa

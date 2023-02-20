@@ -13,7 +13,7 @@ use Termwind\Components\Raw;
 
 class CategoryRepository implements CategoryRepositoryInterface
 {
-    private CategoryProduct $cat;
+    private $cat;
     public function __construct(CategoryProduct $cat)
     {
         $this->cat = $cat;
@@ -131,5 +131,11 @@ class CategoryRepository implements CategoryRepositoryInterface
             $item->subcat = $subCat;
         }
         return $cat_list;
+    }
+    public function getCatName(){
+        return DB::table('category_products')
+        ->select('id', 'name')
+        ->where('id_parent' ,'!=', 0)
+        ->get();
     }
 }

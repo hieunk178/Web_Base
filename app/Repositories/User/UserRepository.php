@@ -2,13 +2,13 @@
 
 namespace App\Repositories\User;
 
-use App\Repositories\User\UserRepositoryInterface;
 use App\Models\User;
-
-class UserRepository implements UserRepositoryInterface 
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Validator;
+class UserRepository implements UserRepositoryInterface
 {
-    private User $user;
-    public function __construct(User $user) 
+    private $user;
+    public function __construct(User $user)
     {
         $this->user = $user;
     }
@@ -39,7 +39,47 @@ class UserRepository implements UserRepositoryInterface
     {
         return $this->user->onlyTrashed()->where('name', 'LIKE', "%{$search}%")->paginate(15);
     }
-    public function create($user){
+    public function create($request){
+        $request->validate(
+            [
+                'name'=> 'required|string|max:255',
+                'email'=>'required|string|email|max:255|unique:users',
+                'password'=> 'required|string|min:8|confirmed',
+                'phone'=> 'string|digits:10',
+                'avatar' => 'mimes:jpg,png,gif|max:20000',
+            ],
+            [
+                'required'=> ':attribute không được bỏ trống!',
+                'min'=> ':attribute có độ dài ít nhất :min ký tự!',
+                'max'=> ':attribute có độ dài lớn nhất :max ký tự!',
+                'confirmed'=> 'Xác nhận mật khẩu không thành công!',
+                'unique'=> ':attribute đã được sử dụng',
+                'mimes'=> ':attribute phải có định dạng jpg, png, gif!',
+            ],
+            [
+                'name'=>'Tên người dùng',
+                'email'=>'Email',
+                'password'=>'Mật khẩu',
+                'avatar'=>'Ảnh đại diện',
+                'phone'=>'Số điện thoại',
+            ]
+        );
+
+        if(empty($request->file())){
+            $avatar = 'user-blank.png';
+        }else{
+            $fileName = time().'.'.$request->avatar->extension();
+            $request->avatar->move(public_path("images"), $fileName);
+            $avatar = $fileName;
+        }
+        $user = [
+            'name' =>$request->input('name'),
+            'email' =>$request->input('email'),
+            'gender' =>$request->input('gender'),
+            'phone' =>$request->input('phone'),
+            'password' => Hash::make($request->input('password')),
+            'avatar' =>$avatar,
+        ];
         return $this->user->create($user);
     }
     public function updateUser($id, $attributes = [])
@@ -74,7 +114,7 @@ class UserRepository implements UserRepositoryInterface
 
         return false;
     }
-    
+
 
     public function delete($id)
     {
@@ -89,4 +129,59 @@ class UserRepository implements UserRepositoryInterface
     public function total(){
         return $this->user->total();
     }
+
+    //API
+    public function register($request){
+        $validator = Validator::make($request->all(),
+            [
+                'name'=> 'required|string|max:255',
+                'email'=>'required|string|email|max:255|unique:users',
+                'password'=> 'required|string|min:8|confirmed',
+                'phone'=> 'string|digits:10',
+                'avatar' => 'mimes:jpg,png,gif|max:20000',
+            ],
+            [
+                'required'=> ':attribute không được bỏ trống!',
+                'min'=> ':attribute có độ dài ít nhất :min ký tự!',
+                'max'=> ':attribute có độ dài lớn nhất :max ký tự!',
+                'confirmed'=> 'Xác nhận mật khẩu không thành công!',
+                'unique'=> ':attribute đã được sử dụng',
+                'mimes'=> ':attribute phải có định dạng jpg, png, gif!',
+            ],
+            [
+                'name'=>'Tên người dùng',
+                'email'=>'Email',
+                'password'=>'Mật khẩu',
+                'avatar'=>'Ảnh đại diện',
+                'phone'=>'Số điện thoại',
+            ]
+        );
+        if ($validator->fails()) {
+            return [
+                'code' => 422,
+                'errors' => $validator->errors()
+            ];
+        }
+        if(empty($request->file())){
+            $avatar = 'user-blank.png';
+        }else{
+            $fileName = time().'.'.$request->avatar->extension();
+            $request->avatar->move(public_path("images"), $fileName);
+            $avatar = $fileName;
+        }
+        $user = [
+            'name' =>$request->input('name'),
+            'email' =>$request->input('email'),
+            'gender' =>$request->input('gender'),
+            'phone' =>$request->input('phone'),
+            'password' => Hash::make($request->input('password')),
+            'avatar' =>$avatar,
+        ];
+
+        return [
+            'code' => 201,
+            'data' => $this->user->create($user)
+        ];
+    }
+
 }

@@ -16,6 +16,10 @@ class AdminProductController extends Controller
     public function __construct(ProductRepositoryInterface $productRepository)
     {
         $this->productRepository = $productRepository;
+        $this->middleware(function($request, $next){
+            session(['module_active' => 'product']);
+            return $next($request);
+        });
     }
 
     //action hiển thị danh sách các sản phẩm
