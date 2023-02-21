@@ -56,4 +56,5 @@ class User extends Authenticatable
     public function permission(){
         return ['category.index', 'admin.dashboard'];
     }
+
 }

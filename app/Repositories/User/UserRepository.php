@@ -2,7 +2,9 @@
 
 namespace App\Repositories\User;
 
+use App\Models\SessionUser;
 use App\Models\User;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
 class UserRepository implements UserRepositoryInterface
@@ -184,4 +186,49 @@ class UserRepository implements UserRepositoryInterface
         ];
     }
 
+    public function login($request){
+        $credentials = $request->only('email', 'password');
+            if (Auth::attempt($credentials)) {
+                $user = Auth::user();
+                $checkTokenExit = SessionUser::where('user_id', $user->id)->first();
+                if(empty($checkTokenExit)){
+                    $userSession = SessionUser::create([
+                        'token' => $user->createToken('token',['user' => $user])->plainTextToken,
+                        'refresh_token' => $user->createToken('refresh_token',['user' => $user])->plainTextToken,
+                        'token_expried'=> date('Y-m-d H:i:s', strtotime('+30 day')),
+                        'refresh_token_expried'=> date('Y-m-d H:i:s', strtotime('+360 day')),
+                        'user_id' => $user->id
+                    ]);
+                }else{
+                    $userSession = $checkTokenExit;
+                }
+                return response()->json([
+                    'code'=> 200,
+                    'data' => $userSession->only(['token', 'refresh_token', 'token_expried', 'refresh_token_expried'])
+                ], 200);
+            }else{
+                return response()->json([
+                    'code'=>401,
+                    'error'=> 'Email hoặc mật khẩu không chính xác!',
+                ],401);
+            }
+    }
+    public function getUserInfo($request){
+        if(empty($request->token)){
+            return response()->json([
+                'status'=>401,
+                'message'=>'Bạn không gửi token lên!'
+            ],401);
+        }elseif (empty($checkToken = SessionUser::where('token', $request->token)->first())){
+            return response()->json([
+                'status'=>401,
+                'message'=>'Token không hợp lệ!'
+            ],401);
+        }else{
+            return response()->json([
+                'status'=>200,
+                'info'=>User::find($checkToken->user_id)->only(['name', 'avatar'])
+            ],200);
+        }
+    }
 }

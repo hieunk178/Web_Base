@@ -31,3 +31,6 @@ Route::get('product', [ApiController::class, 'listProduct'])->name('api.product.
 
 Route::post('register', [ApiAuthController::class, 'register'])->name('api.register');
 Route::post('login', [ApiAuthController::class, 'login'])->name('api.login');
+
+    Route::get('user-info', [ApiAuthController::class, 'getUserInfo'])->name('api.getUserInfo');
+
