@@ -1,0 +1,78 @@
+-- phpMyAdmin SQL Dump
+-- version 5.2.0
+-- https://www.phpmyadmin.net/
+--
+-- Máy chủ: 127.0.0.1
+-- Thời gian đã tạo: Th1 11, 2023 lúc 04:43 AM
+-- Phiên bản máy phục vụ: 10.4.24-MariaDB
+-- Phiên bản PHP: 8.1.6
+
+SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
+START TRANSACTION;
+SET time_zone = "+00:00";
+
+
+/*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
+/*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
+/*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
+/*!40101 SET NAMES utf8mb4 */;
+
+--
+-- Cơ sở dữ liệu: `quangvinhmart`
+--
+
+-- --------------------------------------------------------
+
+--
+-- Cấu trúc bảng cho bảng `brands`
+--
+
+CREATE TABLE `brands` (
+  `id` int(10) UNSIGNED NOT NULL,
+  `name` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `image` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `description` text COLLATE utf8mb4_unicode_ci DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Đang đổ dữ liệu cho bảng `brands`
+--
+
+INSERT INTO `brands` (`id`, `name`, `image`, `description`) VALUES
+(1, 'KANGAROO', '1672753737.jpg', NULL),
+(2, 'A.O.Smith', '1672754088.png', NULL),
+(3, 'Elmich', '1672754149.png', 'Các sản phẩm của thương hiệu Elmich đều đạt chất lượng tốt, đáp ứng nhu cầu sử dụng của đối tượng khách hàng ở phân khúc trung và cao cấp.'),
+(4, 'Kalite', '1672754239.png', 'Thương hiệu Kalite'),
+(5, 'KAROFI', '1672754282.png', NULL),
+(6, 'MUTOSI', '1672754350.png', NULL),
+(7, 'SHARP', '1672754397.png', NULL),
+(8, 'SUNHOUSE', '1672754474.png', NULL),
+(9, 'TOSHIBA', '1672754518.png', NULL),
+(10, 'Unie', '1672754588.png', NULL),
+(11, 'Unilever Pureit', '1672754717.jpg', NULL);
+
+--
+-- Chỉ mục cho các bảng đã đổ
+--
+
+--
+-- Chỉ mục cho bảng `brands`
+--
+ALTER TABLE `brands`
+  ADD PRIMARY KEY (`id`),
+  ADD UNIQUE KEY `brands_name_unique` (`name`);
+
+--
+-- AUTO_INCREMENT cho các bảng đã đổ
+--
+
+--
+-- AUTO_INCREMENT cho bảng `brands`
+--
+ALTER TABLE `brands`
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=16;
+COMMIT;
+
+/*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
+/*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
+/*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;

@@ -17,11 +17,22 @@ class Authenticate extends Middleware
     {
         if (!Auth::check()) {// Chưa đăng nhập
             return redirect()->route('login');
+        } else {
+            $user = Auth::user();  //Lấy thông tin user khi đã đăng nhập
+            //Kiểm tra quyền của người dùng
+            $route = $request->route()->getName();
+            if ($user->can($route)) {
+                return $next($request);
+            } else {
+                if($user->can('admin.dashboard')){
+                    return redirect()->route('admin.dashboard')->with(['danger' => 'Bạn không có quyền truy cập vào trang đó!']); // Thêm thông báo lỗi
+                }else{
+                    Auth::logout(); // Logout nếu không có quyền
+                    return redirect()->route('login')->with(['danger' => 'Bạn không có quyền truy cập vào trang quản trị! Hãy liên hệ với quản trị viên để được cấp quyền!']); // Thêm thông báo lỗi
+                }
+                
+                
+            }
         }
-        $user = Auth::user();  //Lấy thông tin user khi đã đăng nhập
-        //Kiểm tra quyền của người dùng
-        $route = $request->route()->getName();
-        // dd($user->can($route));
-        return $next($request);
     }
 }

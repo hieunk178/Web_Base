@@ -31,6 +31,9 @@ Route::get('product', [ApiController::class, 'listProduct'])->name('api.product.
 
 Route::post('register', [ApiAuthController::class, 'register'])->name('api.register');
 Route::post('login', [ApiAuthController::class, 'login'])->name('api.login');
-
+Route::middleware('token.verify')->group(function () {
     Route::get('user-info', [ApiAuthController::class, 'getUserInfo'])->name('api.getUserInfo');
+    Route::get('cart/add', [ApiCartController::class, 'addToCart'])->name('api.addToCart');
+});
+Route::get('listRoute', [RoleController::class, 'listRoute'])->name('.listRoute');
 

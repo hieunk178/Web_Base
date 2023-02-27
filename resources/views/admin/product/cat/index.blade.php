@@ -3,11 +3,17 @@
 
 <div id="content" class="container-fluid">
     @if(session('success'))
-    <div class="alert alert-success">{{session('success')}}</div>
-    @endif
-    @if(session('danger'))
-    <div class="alert alert-danger">{{session('danger')}}</div>
-    @endif
+            <div class="alert alert-success alert-dismissible">
+                <button type="button" class="close" data-dismiss="alert">&times;</button>
+                {{session('success')}}
+            </div>
+        @endif
+        @if(session('danger'))
+            <div class="alert alert-danger alert-dismissible">
+                <button type="button" class="close" data-dismiss="alert">&times;</button>
+                {{session('danger')}}
+            </div>
+        @endif
     <div class="card">
         <div class="card-header font-weight-bold d-flex justify-content-between align-items-center">
             <h5 class="m-0 ">Danh sách thành viên</h5>
@@ -20,7 +26,7 @@
         </div>
         <div class="card-body">
             <div class="analytic">
-                <a href="{{route('admin.product.cat.list')}}" class="text-primary">Tất cả<span class="text-muted">({{$count['all_cat']}})</span></a>
+                <a href="{{route('admin.product.cat.index')}}" class="text-primary">Tất cả<span class="text-muted">({{$count['all_cat']}})</span></a>
                 <a href="{{route('admin.product.cat.list.status', 'active')}}" class="text-primary">Hoạt động<span class="text-muted">({{$count['cat_active']}})</span></a>
                 <a href="{{route('admin.product.cat.list.status', 'del')}}" class="text-primary">Vô hiệu hóa<span class="text-muted">({{$count['cat_remove']}})</span></a>
             </div>

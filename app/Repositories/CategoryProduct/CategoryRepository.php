@@ -53,7 +53,13 @@ class CategoryRepository implements CategoryRepositoryInterface
         // }
         // // dd($Categorys);
         // return $cats->where('name', 'LIKE', "%{$search}%")->paginate(15);
-        return DB::table('category_products')->where('name', 'LIKE', "%{$search}%")->paginate(15);
+        $cats = DB::table('category_products')->where('name', 'LIKE', "%{$search}%");
+        if ($where == "active") {
+                $cats->where('deleted_at', null);
+            } elseif ($where == "remove") {
+                $cats->where('deleted_at', '!=', null);
+            }
+        return $cats->paginate(15);
     }
     public function createCategory($Category)
     {

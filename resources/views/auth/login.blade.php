@@ -18,7 +18,20 @@
 </head>
 <body>
     <div id="login-from" class="auth d-flex justify-content-center align-items-center">
+        @if(session('success'))
+    <div class="alert alert-success alert-dismissible">
+        <button type="button" class="close" data-dismiss="alert">&times;</button>
+        {{session('success')}}
+    </div>
+    @endif
+    @if(session('danger'))
+    <div class="alert alert-danger alert-dismissible">
+        <button type="button" class="close" data-dismiss="alert">&times;</button>
+        {{session('danger')}}
+    </div>
+    @endif
                         <div class="card">
+
                             <div class="card-header">{{ __('Đăng nhập') }}</div>
                             <div class="card-body">
                                 <form method="POST" action="{{ route('login') }}">
@@ -92,5 +105,9 @@
     .auth .card{
         width: 30%;
         transform: translateY(-150px);
+    }
+    .alert{
+        position: absolute;
+        top: 10px;
     }
 </style>

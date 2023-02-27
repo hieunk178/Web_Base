@@ -9,6 +9,14 @@ use App\Http\Controllers\Controller;
 
 class RoleController extends Controller
 {
+    public function  __construct()
+    {
+        $this->middleware(function($request, $next){
+            session(['module_active' => 'role']);
+            return $next($request);
+        });
+    }
+
     public function index()
     {
         $data = Roles::paginate(15);
@@ -17,8 +25,15 @@ class RoleController extends Controller
 
     public function create()
     {
-        $route = '';
-        return view('admin.role.create', compact('route'));
+        $routes = [];
+        $allRoute = Route::getRoutes();
+        foreach ($allRoute as $route){
+            $name = $route->getName();
+            if(!in_array($name, $routes) && strpos($name,'admin') !== false)
+                array_push($routes,$name);
+        }
+//        dd($routes);
+        return view('admin.role.create', compact('routes'));
     }
 
     public function store(Request $request)
@@ -33,8 +48,9 @@ class RoleController extends Controller
         );
         $routes = json_encode($request->route);
         Roles::create(
-            ['name' => $request->name],
-            ['permissions' => $routes],
+            ['name' => $request->name,
+            'permissions' => $routes
+            ]
         );
         return redirect('admin/role')->with('success', "Thêm nhóm quyền thành công!");
     }
@@ -44,12 +60,12 @@ class RoleController extends Controller
         $routeNames = [];
 
         foreach ($routeCollection as $value) {
-            if(strpos($value->getName(), 'dmin.')){
+            if(strpos($value->getName(), '') !== false){
                 $routeNames[] = $value->getName();
             }
         }
         return response()->json(
             $routeNames
-        ); 
+        );
     }
 }

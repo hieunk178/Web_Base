@@ -48,13 +48,26 @@ class User extends Authenticatable
     ];
 
     public function hasPermission($route){
-        $routes = $this->permission();
+        $routes = $this->routes();
         return in_array($route, $routes) ? true : false;
     }
 
+    public function routes(){
+        $data = [];
+        foreach($this->getRoles as $role){
+            $permissions = json_decode($role->permissions);
+            // dd($permissions);
+            foreach ($permissions as $permission){
+                if(!in_array($permission, $data)){
+                    array_push($data,$permission);
+                }
+            }
+        }
+        return $data;
+    }
     //cac route đã được gán cho người dùng này
-    public function permission(){
-        return ['category.index', 'admin.dashboard'];
+    public function getRoles(){
+        return $this->belongsToMany(Roles::class,'user_roles', 'user_id', 'role_id');
     }
 
 }

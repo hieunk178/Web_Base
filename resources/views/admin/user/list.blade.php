@@ -26,7 +26,7 @@
         </div>
         <div class="card-body">
             <div class="analytic">
-                <a href="{{route('admin.user.list')}}" class="text-primary">Tất cả<span class="text-muted">({{$count['all_user']}})</span></a>
+                <a href="{{route('admin.user.index')}}" class="text-primary">Tất cả<span class="text-muted">({{$count['all_user']}})</span></a>
                 <a href="{{route('admin.user.status', 'active')}}" class="text-primary">Hoạt động<span class="text-muted">({{$count['user_active']}})</span></a>
                 <a href="{{route('admin.user.status', 'del')}}" class="text-primary">Vô hiệu hóa<span class="text-muted">({{$count['user_remove']}})</span></a>
             </div>

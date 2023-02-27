@@ -57,11 +57,9 @@
                     <label for="">Nhóm quyền</label>
                     <select class="form-control" id="">
                         <option>Chọn quyền</option>
-                        
-                        <option>Danh mục 1</option>
-                        <option>Danh mục 2</option>
-                        <option>Danh mục 3</option>
-                        <option>Danh mục 4</option>
+                        @foreach($roles as $role)
+                            <option value="{{$role->id}}">{{$role->name}}</option>
+                        @endforeach
                     </select>
                 </div>
 

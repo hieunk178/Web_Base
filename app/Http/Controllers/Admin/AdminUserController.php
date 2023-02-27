@@ -3,6 +3,8 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Models\Roles;
+use App\Models\UserRole;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -21,7 +23,7 @@ class AdminUserController extends Controller
         });
     }
 
-    function list(Request $request, $status=""){
+    function index(Request $request, $status=""){
 
         $count = $this->userRepository->count();
         if($status == "del"){
@@ -67,7 +69,8 @@ class AdminUserController extends Controller
     }
 
     function create(){
-        return view('admin.user.create');
+        $roles = Roles::get();
+        return view('admin.user.create', compact('roles'));
     }
 
     function store(Request $request){
@@ -139,8 +142,10 @@ class AdminUserController extends Controller
     }
 
     function edit($id){
+        $roles = Roles::leftJoin('user_roles', 'roles.id','=', 'user_roles.role_id')
+        ->select('roles.id', 'roles.name', 'user_roles.user_id')->get();
         $user = $this->userRepository->find($id);
-        return view('admin.user.edit', compact('user'));
+        return view('admin.user.edit', compact('user','roles'));
     }
     function update(Request $req, $id){
         $req->validate(
@@ -160,7 +165,13 @@ class AdminUserController extends Controller
                 'avatar'=>'Ảnh đại diện',
             ],
         );
+
         $user = $this->userRepository->find($id);
+        // dd($req->input('role'));
+        UserRole::create([
+            'user_id'=>"$user->id",
+            'role_id'=>$req->input('role')
+        ]);
         if(empty($req->file())){
             $avatar = $user->avatar;
         }else{

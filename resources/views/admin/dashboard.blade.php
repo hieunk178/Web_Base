@@ -1,6 +1,18 @@
 @extends('layouts/admin')
 @section('content')
-<div class="container-fluid py-5">
+<div class="container-fluid pt-5">
+    @if(session('success'))
+    <div class="alert alert-success alert-dismissible">
+        <button type="button" class="close" data-dismiss="alert">&times;</button>
+        {{session('success')}}
+    </div>
+    @endif
+    @if(session('danger'))
+    <div class="alert alert-danger alert-dismissible">
+        <button type="button" class="close" data-dismiss="alert">&times;</button>
+        {{session('danger')}}
+    </div>
+    @endif
     <div class="row">
         <div class="col">
             <div class="card text-white bg-primary mb-3" style="max-width: 18rem;">

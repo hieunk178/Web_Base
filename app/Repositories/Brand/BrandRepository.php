@@ -8,10 +8,10 @@ use App\Repositories\Brand\BrandRepositoryInterface;
 use App\Models\Brand;
 use GuzzleHttp\Psr7\Request;
 
-class BrandRepository implements BrandRepositoryInterface 
+class BrandRepository implements BrandRepositoryInterface
 {
-    private Brand $Brand;
-    public function __construct(Brand $Brand) 
+    private $Brand;
+    public function __construct(Brand $Brand)
     {
         $this->Brand = $Brand;
     }

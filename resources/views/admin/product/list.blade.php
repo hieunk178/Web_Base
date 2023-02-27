@@ -25,7 +25,7 @@
         </div>
         <div class="card-body">
             <div class="analytic">
-                <a href="{{route('admin.product.list')}}" class="text-primary">Tất cả<span class="text-muted">({{$count['all_pro']}})</span></a>
+                <a href="{{route('admin.product.index')}}" class="text-primary">Tất cả<span class="text-muted">({{$count['all_pro']}})</span></a>
                 <a href="{{route('admin.product.list.status', 'active')}}" class="text-primary">Hoạt động<span class="text-muted">({{$count['pro_active']}})</span></a>
                 <a href="{{route('admin.product.list.status', 'del')}}" class="text-primary">Ẩn<span class="text-muted">({{$count['pro_remove']}})</span></a>
             </div>

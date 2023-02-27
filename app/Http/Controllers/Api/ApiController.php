@@ -35,7 +35,7 @@ class ApiController extends Controller
      */
 
     public function index(){
-        $sliders = $this->sliderRepo->getAllSlider();
+        $sliders = $this->sliderRepo->getSliderShow();
         $sellingProducts = $this->productRepo->getSellingProducts();
         $products = $this->productRepo->getProductByCategory();
         return response()->json(

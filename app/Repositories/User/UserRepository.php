@@ -214,17 +214,8 @@ class UserRepository implements UserRepositoryInterface
             }
     }
     public function getUserInfo($request){
-        if(empty($request->token)){
-            return response()->json([
-                'status'=>401,
-                'message'=>'Bạn không gửi token lên!'
-            ],401);
-        }elseif (empty($checkToken = SessionUser::where('token', $request->token)->first())){
-            return response()->json([
-                'status'=>401,
-                'message'=>'Token không hợp lệ!'
-            ],401);
-        }else{
+        {
+            $checkToken = SessionUser::where('token', $request->token)->first();
             return response()->json([
                 'status'=>200,
                 'info'=>User::find($checkToken->user_id)->only(['name', 'avatar'])

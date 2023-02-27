@@ -47,13 +47,12 @@
                 </div>
                 <div class="form-group">
                     <label for="">Nhóm quyền</label>
-                    <select class="form-control" id="">
-                        <option>Chọn quyền</option>
-                        <option>Danh mục 1</option>
-                        <option>Danh mục 2</option>
-                        <option>Danh mục 3</option>
-                        <option>Danh mục 4</option>
-                    </select>
+                        @foreach($roles as $role)
+                        <div class="checkRole">
+                            <input type="checkbox" name="role[]" value="{{$role->id}}" {{$user->id == $role->user_id ? "checked":""}}>
+                            <label for="role[]">{{$role->name}}</label>
+                        </div>
+                        @endforeach
                 </div>
 
                 <button type="submit" name="btnEdit" value="Cập nhật" class="btn btn-primary">Cập nhật</button>

@@ -35,7 +35,7 @@ class AdminCategoryProductController extends Controller
                 $search = $request->input('keyword');
             $cats = $this->categoryRepo->getCategory('remove', $search);
             //dd($users->total()); 
-            return view("admin.product.cat.list", compact("cats", 'catName', "count", "list_act"));
+            return view("admin.product.cat.index", compact("cats", 'catName', "count", "list_act"));
         } else if ($status == "active") {
             $list_act = [
                 'remove' => "Vô hiệu hóa",
@@ -45,7 +45,7 @@ class AdminCategoryProductController extends Controller
                 $search = $request->input('keyword');
             $cats = $this->categoryRepo->getCategory('active', $search);
             // dd($users->total()); 
-            return view("admin.product.cat.list", compact("cats", 'catName', "count", "list_act"));
+            return view("admin.product.cat.index", compact("cats", 'catName', "count", "list_act"));
         } else {
             $search = "";
             if ($request->input('keyword'))
@@ -63,7 +63,7 @@ class AdminCategoryProductController extends Controller
             }
             $cats = $this->categoryRepo->getCategory('', $search);
             //dd($users->total()); 
-            return view("admin.product.cat.list", compact("cats", 'catName', "count", "list_act"));
+            return view("admin.product.cat.index", compact("cats", 'catName', "count", "list_act"));
         }
     }
 
@@ -147,4 +147,27 @@ class AdminCategoryProductController extends Controller
         ]);
         return redirect('admin/product/cat/list')->with('success', 'Cập nhật thành công danh mục!');
     }
+
+    public function remove($id){
+        if($this->categoryRepo->removeCategory($id)){
+            return redirect()->route('admin.product.cat.index')->with('success', 'Ẩn thành công danh mục!');
+        }else{
+            return redirect()->route('admin.product.cat.index')->with('success', 'Ẩn danh mục không thành công!');
+        }
+    }
+    public function restore($id){
+        if($this->categoryRepo->restoreCategory($id)){
+            return redirect()->route('admin.product.cat.index')->with('success', 'Hiển thị thành công danh mục!');
+        }else{
+            return redirect()->route('admin.product.cat.index')->with('success', 'Hiển thị danh mục không thành công!');
+        }
+    }
+    public function delete($id){
+        if($this->categoryRepo->deleteCategory($id)){
+            return redirect()->route('admin.product.cat.index')->with('success', 'Xóa thành công danh mục!');
+        }else{
+            return redirect()->route('admin.product.cat.index')->with('success', 'Xóa danh mục không thành công!');
+        }
+    }
+    
 }

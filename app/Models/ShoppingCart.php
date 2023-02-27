@@ -4,12 +4,9 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\SoftDeletes;
 
-class Slider extends Model
+class ShoppingCart extends Model
 {
     use HasFactory;
-    use SoftDeletes;
-    protected $fillable = ['url'];
-
+    protected $guarded = [];
 }

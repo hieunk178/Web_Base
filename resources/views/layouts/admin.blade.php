@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
-    
+
     <link rel="icon" type="image/png" sizes="16x16" href="{{asset('images/logo.png')}}">
     <link rel="stylesheet" href="{{asset('css/fontawesome.min.css')}}">
     <link rel="stylesheet" href="{{asset('css/style.css')}}">
@@ -19,7 +19,7 @@
             <div class="nav-right ">
                 <div class="btn-group mr-auto">
                     <button type="button" class="btn dropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                        <i class="plus-icon fas fa-plus-circle"></i> 
+                        <i class="plus-icon fas fa-plus-circle"></i>
                     </button>
                     <div class="dropdown-menu">
                         <a class="dropdown-item" href="{{url('admin/post/add')}}">Thêm bài viết</a>
@@ -88,6 +88,14 @@
                             <li><a href="{{url('/admin/post/cat/list')}}">Danh mục</a></li>
                         </ul>
                     </li>
+                    <li class="nav-link {{$module_active == 'slider' ? 'active': ''}}">
+                        <a href="{{url('/admin/slider')}}">
+                            <div class="nav-link-icon d-inline-flex">
+                                <i class="fa-duotone fa-film-simple"></i>
+                            </div>
+                            Slider
+                        </a>
+                    </li>
                     <li class="nav-link {{$module_active == 'product' ? 'active': ''}}">
                         <a href="{{url('/admin/product')}}">
                             <div class="nav-link-icon d-inline-flex">
@@ -99,7 +107,7 @@
                         <ul class="sub-menu">
                             <li><a href="{{url('/admin/product/create')}}">Thêm mới</a></li>
                             <li><a href="{{url('/admin/product/list')}}">Danh sách</a></li>
-                            <li><a href="{{url('/admin/product/cat/list')}}">Danh mục</a></li>
+                            <li><a href="{{url('/admin/product/cat')}}">Danh mục</a></li>
                         </ul>
                     </li>
                     <li class="nav-link {{$module_active == 'brand' ? 'active': ''}}">
@@ -128,6 +136,7 @@
                                 <i class="fa-solid fa-message"></i>
                             </div>
                             Phản hồi
+                        </a>
                     </li>
                     <li class="nav-link {{$module_active == 'user' ? 'active': ''}}">
                         <a href="{{url('/admin/user/list')}}">
@@ -143,17 +152,17 @@
                             <li><a href="{{url('admin/user/list')}}">Danh sách</a></li>
                         </ul>
                     </li>
-                    <li class="nav-link {{$module_active == 'roles' ? 'active': ''}}">
+                    <li class="nav-link {{$module_active == 'role' ? 'active': ''}}">
                         <a href="{{url('/admin/role')}}">
                             <div class="nav-link-icon d-inline-flex">
                                 <i class="fa-duotone fa-user-group"></i>
                             </div>
-                            Nhóm phân quyền
+                            Nhóm quyền
                         </a>
                         <i class="arrow fas fa-angle-right"></i>
                         <ul class="sub-menu">
-                            <li><a href="{{url('/admin/page/add')}}">Thêm mới</a></li>
-                            <li><a href="{{url('/admin/page/list')}}">Danh sách</a></li>
+                            <li><a href="{{url('/admin/role/create')}}">Thêm mới</a></li>
+                            <li><a href="{{url('/admin/role/list')}}">Danh sách</a></li>
                         </ul>
                     </li>
                     <li class="nav-link">
@@ -204,6 +213,8 @@
         });
     });
 </script>
+    @yield('js');
+    @yield('css');
 </body>
 
 </html>

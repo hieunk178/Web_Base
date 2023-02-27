@@ -3,10 +3,10 @@
 <div id="content" class="container-fluid">
 <div class="card">
     @if(session('success'))
-    <div class="alert alert-success">{{session('success')}}</div>
+    <div class="alert alert-success alert-dismissible">{{session('success')}}</div>
     @endif
     @if(session('danger'))
-    <div class="alert alert-danger">{{session('danger')}}</div>
+    <div class="alert alert-danger alert-dismissible">{{session('danger')}}</div>
     @endif
     <div class="card-header font-weight-bold d-flex justify-content-between align-items-center">
         <h5 class="m-0 ">Danh sách phân quyền</h5>
