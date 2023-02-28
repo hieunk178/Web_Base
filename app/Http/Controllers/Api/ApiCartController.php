@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api;
 
 use Illuminate\Http\Request;
 use App\Repositories\Cart\CartRepository;
+use App\Http\Controllers\Controller;
 
 
 class ApiCartController extends Controller
@@ -14,7 +15,10 @@ class ApiCartController extends Controller
         $this->cartRepo = $cartRepo;
     }
     public function addToCart(Request $request){
-        $this->cartRepo->addToCart($request);
+        return $this->cartRepo->addToCart($request);
+    }
+    public function getCart(Request $request){
+        return $this->cartRepo->getCart($request);
     }
 
 }

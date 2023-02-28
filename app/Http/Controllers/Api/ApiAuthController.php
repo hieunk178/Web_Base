@@ -30,7 +30,11 @@ class ApiAuthController extends Controller
     {
         return $this->userRepo->login($request);
     }
+    public function logout(Request $request){
+        return $this->userRepo->logout($request);
+    }
     public function getUserInfo(Request $request){
         return $this->userRepo->getUserInfo($request);
     }
+    
 }

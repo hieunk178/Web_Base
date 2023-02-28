@@ -213,6 +213,20 @@ class UserRepository implements UserRepositoryInterface
                 ],401);
             }
     }
+    public function logout($request){
+        $userSession = SessionUser::where('token', $request->token);
+        if($userSession){
+            $userSession->delete();
+            return response()->json([
+                'code'=> 200,
+                'message' => 'Đăng xuất thành công!'
+            ], 200);
+        }
+        return response()->json([
+            'code'=> 401,
+            'message' => 'Bạn chưa đăng nhập!'
+        ], 401);
+    }
     public function getUserInfo($request){
         {
             $checkToken = SessionUser::where('token', $request->token)->first();
