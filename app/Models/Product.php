@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use App\Models\CategoryProduct;
 
 class Product extends Model
 {
@@ -17,5 +18,9 @@ class Product extends Model
         } else {
             return number_format($this->price, 0, '.', ',').' VND';
         }
+    }
+    public function category()
+    {
+        return $this->belongsTo(CategoryProduct::class, 'cat_id');
     }
 }

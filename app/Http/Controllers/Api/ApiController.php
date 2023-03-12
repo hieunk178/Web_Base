@@ -8,6 +8,7 @@ use App\Repositories\Product\ProductRepositoryInterface;
 use App\Repositories\Slider\SliderRepository;
 use App\Repositories\CategoryProduct\CategoryRepository;
 use App\Repositories\Brand\BrandRepositoryInterface;
+use Exception;
 
 class ApiController extends Controller
 {
@@ -35,27 +36,53 @@ class ApiController extends Controller
      */
 
     public function index(){
-        $sliders = $this->sliderRepo->getSliderShow();
-        $sellingProducts = $this->productRepo->getSellingProducts();
-        $products = $this->productRepo->getProductByCategory();
-        return response()->json(
-            [
-                "sliders" => $sliders,
-                "selling_products" => $sellingProducts,
-                "products" => $products,
-                "status" => 200,
-                "message" => "OK"
-            ]
-        );
+        try{
+            $sliders = $this->sliderRepo->getSliderShow();
+            $sellingProducts = $this->productRepo->getSellingProducts();
+            $products = $this->productRepo->getProductByCategory();
+            return response()->json(
+                [
+                    "sliders" => $sliders,
+                    "selling_products" => $sellingProducts,
+                    "products" => $products,
+                    "status" => 200,
+                    "message" => "OK"
+                ]
+            );
+        }catch(Exception $e){
+            return response()->json(
+                [
+                    "status" => 500,
+                    "message" => $e->getMessage()
+                ],500
+            );
+        }
     }
 
     public function getCatMenu(){
-        $data = $this->catRepo->getCatMenu();
-        return response()->json(
-            [
-                "CatMenu" => $data
-            ]
-        );
+        try{
+            $data = $this->catRepo->getCatMenu();
+            return response()->json(
+                [
+                    "CatMenu" => $data
+                ]
+            );
+        }catch(Exception $e){
+            if($e->getCode() == '2002'){
+                return response()->json(
+                    [
+                        "status" => 500,
+                        "message" => "Không kết nối được với server!"
+                    ],500
+                );
+            }elseif($e->getCode() == '42S02')
+            return response()->json(
+                [
+                    "status" => $e->getCode(),
+                    "message" => $e->getMessage()
+                ],500
+            );
+        }
     }
 
     public function productDetail($code){
