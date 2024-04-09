@@ -142,9 +142,9 @@ class AdminUserController extends Controller
     }
 
     function edit($id){
-        $roles = Roles::leftJoin('user_roles', 'roles.id','=', 'user_roles.role_id')
-        ->select('roles.id', 'roles.name', 'user_roles.user_id')->get();
+        $roles = Roles::get();
         $user = $this->userRepository->find($id);
+        $user->roles = UserRole::where('user_id', $user->id)->pluck('role_id')->toArray();
         return view('admin.user.edit', compact('user','roles'));
     }
     function update(Request $req, $id){
@@ -152,7 +152,7 @@ class AdminUserController extends Controller
             [
                 'name'=> 'required|string|max:255',
                 'phone'=> 'required|string|digits:10',
-                'avatar' => 'mimes:jpg,png,gif|max:20000',
+                'avatar' => 'mimes:jpg,png,gif,webp|max:20000',
             ],
             [
                 'required'=> ':attribute không được bỏ trống!',
@@ -167,16 +167,16 @@ class AdminUserController extends Controller
         );
 
         $user = $this->userRepository->find($id);
-        // dd($req->input('role'));
-        UserRole::create([
-            'user_id'=>"$user->id",
-            'role_id'=>$req->input('role')
-        ]);
+        UserRole::where('user_id', $user->id)->delete();
+        UserRole::insert(array_map(function($role) use($user){
+            return ['user_id'=>$user->id, 'role_id'=>$role];
+        }, $req->input('role', [])));
+
         if(empty($req->file())){
             $avatar = $user->avatar;
         }else{
             $fileName = time().'.'.$req->avatar->extension();
-            $req->avatar->move(public_path("images"), $fileName);
+            $req->avatar->move(public_path("uploads"), $fileName);
             $avatar = $fileName;
         }
         $userUpdate = [

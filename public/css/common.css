@@ -1,0 +1,63 @@
+.swiper-custom .swiper-button-next, .swiper-custom .swiper-button-prev {
+  color: var(--color-2);
+  background-color: var(--color-1);
+  width: 30px;
+  height: 30px;
+  padding: 8px;
+  border-radius: 50%;
+}
+.swiper-custom .swiper-button-next::after, .swiper-custom .swiper-button-prev::after {
+  display: none;
+}
+.swiper-custom .swiper-button-next.outside {
+  right: -25px;
+}
+.swiper-custom .swiper-button-prev.outside {
+  left: -25px;
+}
+.swiper-custom .swiper-button-next.inside {
+  right: 16px;
+}
+.swiper-custom .swiper-button-prev.inside {
+  left: 16px;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+.logo-image {
+  max-width: 170px;
+  max-height: 70px;
+}
+
+.logo-image-footer {
+  max-width: 170px;
+  max-height: 40px;
+}
+
+.header-mobile-logo {
+  max-width: 144px;
+  max-height: 50px;
+}
+
+.text-limit-2 {
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  word-break: break-word;
+}
+
+table,
+img {
+  max-width: 100%;
+}
+
+th, td {
+  border: 1px solid #000;
+  padding: 4px;
+}

@@ -19,7 +19,6 @@ return new class extends Migration
             $table->text('content');
             $table->timestamps();
             $table->softDeletes();
-            $table->foreign('cus_id')->references('id')->on('customers');
         });
     }
 

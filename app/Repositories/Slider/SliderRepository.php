@@ -4,7 +4,7 @@ namespace App\Repositories\Slider;
 use App\Models\Slider;
 use Illuminate\Http\Request;
 
-class SliderRepository
+class SliderRepository implements SliderRepositoryInterface
 {
     private $slider;
     public function __construct(Slider $slider)
@@ -21,14 +21,13 @@ class SliderRepository
         return $this->slider->withTrashed()->get();
     }
     public function create(Request $request){
-//        dd($request->file('image'));
         $request->validate(
             [
-                'image' => 'required|mimes:jpg,png,gif|max:20000',
+                'image' => 'required|mimes:jpg,png,gif,webp|max:20000',
             ],
             [
                 'required'=> ':attribute không được bỏ trống!',
-                'mimes'=> ':attribute chỉ được dùng file jpg, png, gif'
+                'mimes'=> ':attribute chỉ được dùng file jpg,png,gif,webp'
             ],
             [
                 'image'=>'Hình ảnh',
@@ -36,9 +35,10 @@ class SliderRepository
         );
         if(!empty($request->file('image'))) {
             $fileName = time() . '.' . $request->image->extension();
-            $request->image->move(public_path("images"), $fileName);
+            $request->image->move(public_path("uploads"), $fileName);
+            $pathSlide = '/uploads/' . $fileName;
             return $this->slider->create([
-                'url' => $fileName
+                'url' => $pathSlide
             ]);
         }else return null;
     }

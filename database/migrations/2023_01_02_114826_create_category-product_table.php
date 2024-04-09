@@ -13,10 +13,10 @@ return new class extends Migration
             $table->string('name',200)->unique();
             $table->text('description', 500)->nullable();
             $table->string('image',255)->nullable();
-            $table->unsignedInteger('id_parent');
+            $table->unsignedInteger('id_parent')->default(0);
             $table->timestamps();
             $table->softDeletes();
-        }); 
+        });
     }
 
     /**

@@ -1,0 +1,15 @@
+.product-detail {
+    .product-related {
+        &__item {
+            &:hover {
+                box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.1) !important;
+                > .product-related__image img {
+                    transform: scale(1.1);
+                }
+            }
+        }
+        &__image img {
+            transition: all 0.3s ease-in-out;
+        }
+    }
+}

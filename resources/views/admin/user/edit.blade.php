@@ -38,7 +38,7 @@
                     <div>
                         <input type="file" name="avatar" id="avatar" class="@error('file') is-invalid @enderror">
                         <div class="avatar-img">
-                            <img src="{{asset('images/'.$user->avatar)}}" alt="Ảnh đại diện">
+                            <img src="/uploads/{{$user->avatar}}" alt="Ảnh đại diện">
                         </div>
                     </div>
                     @error('avatar')
@@ -49,8 +49,8 @@
                     <label for="">Nhóm quyền</label>
                         @foreach($roles as $role)
                         <div class="checkRole">
-                            <input type="checkbox" name="role[]" value="{{$role->id}}" {{$user->id == $role->user_id ? "checked":""}}>
-                            <label for="role[]">{{$role->name}}</label>
+                            <input type="checkbox" name="role[]" id="role-{{$role->id}}" value="{{$role->id}}" {{ in_array($role->id, $user->roles) ? "checked":""}}>
+                            <label for="role-{{$role->id}}">{{$role->name}}</label>
                         </div>
                         @endforeach
                 </div>

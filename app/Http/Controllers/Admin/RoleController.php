@@ -25,14 +25,7 @@ class RoleController extends Controller
 
     public function create()
     {
-        $routes = [];
-        $allRoute = Route::getRoutes();
-        foreach ($allRoute as $route){
-            $name = $route->getName();
-            if(!in_array($name, $routes) && strpos($name,'admin') !== false)
-                array_push($routes,$name);
-        }
-//        dd($routes);
+        $routes = $this->listRoute();
         return view('admin.role.create', compact('routes'));
     }
 
@@ -54,18 +47,43 @@ class RoleController extends Controller
         );
         return redirect('admin/role')->with('success', "Thêm nhóm quyền thành công!");
     }
-    public function listRoute()
+    private function listRoute()
     {
         $routeCollection = Route::getRoutes();
         $routeNames = [];
 
-        foreach ($routeCollection as $value) {
-            if(strpos($value->getName(), '') !== false){
-                $routeNames[] = $value->getName();
-            }
+        foreach ($routeCollection as $route){
+            $name = $route->getName();
+            if(!in_array($name, $routeNames) && strpos($name,'admin') !== false)
+                array_push($routeNames,$name);
         }
-        return response()->json(
-            $routeNames
+        return $routeNames;
+    }
+
+    public function edit($id)
+    {
+        $role = Roles::find($id);
+        $routes = json_decode($role->permissions);
+        $allRoute = $this->listRoute();
+        return view('admin.role.edit', compact('role', 'routes', 'allRoute'));
+    }
+
+    public function update(Request $request, $id)
+    {
+        $request->validate(
+            [
+                'name' => 'required'
+            ],
+            [
+                'name.required' => "Tên nhóm quyền không được để trống"
+            ]
         );
+        $routes = json_encode($request->route);
+        Roles::where('id', $id)->update(
+            ['name' => $request->name,
+            'permissions' => $routes
+            ]
+        );
+        return redirect('admin/role')->with('success', "Cập nhật nhóm quyền thành công!");
     }
 }

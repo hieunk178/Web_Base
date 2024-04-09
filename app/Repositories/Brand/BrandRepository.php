@@ -27,6 +27,11 @@ class BrandRepository implements BrandRepositoryInterface
     public function createBrand($Brand){
         return $this->Brand->create($Brand);
     }
+
+    public function edit($id){
+        return $this->Brand->find($id);
+    }
+
     public function updateBrand($id, $attributes = [])
     {
         $result = $this->find($id);

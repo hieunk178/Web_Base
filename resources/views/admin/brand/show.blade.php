@@ -25,7 +25,7 @@
                         <div class="form-group">
                             <label for="name">Tên thương hiệu</label>
                             <input class="form-control" type="text" name="name" id="name">
-                            @error('image')
+                            @error('name')
                             <small class="text-danger">{{$message}}</small>
                             @enderror
                         </div>
@@ -36,9 +36,9 @@
                         <div class="form-group">
                             <label for="image">Ảnh minh họa</label>
                             <div>
-                                <input type="file" name="image" id="image" accept="image/gif, image/jpeg, image/png" onchange="loadFile(event)">
+                                <input type="file" name="image" id="image" accept="image/gif, image/jpeg, image/png, image/webp" onchange="loadFile(event)">
                                 <div class="avatar-img">
-                                    <img id="image-show" src="{{asset('images/image_blank.jpg')}}" alt="Ảnh minh họa">
+                                    <img id="image-show" src="/images/image_blank.jpg" alt="Ảnh minh họa">
                                 </div>
                             </div>
                             @error('image')
@@ -46,7 +46,6 @@
                             @enderror
                         </div>
                         <button type="submit" name="create" class="btn btn-primary btn_action">Thêm mới</button>
-                        <button type="submit" name="update" class="btn btn-primary btn_action">Cập nhật</button>
                     </form>
                 </div>
             </div>
@@ -74,13 +73,15 @@
                                 <td>
                                     <input type="checkbox" name="list_check[]" value="{{$brand->id}}">
                                 </td>
-                                <td class="img-brand"><img src="{{ asset('images/'.$brand->image) }}" alt="Hình ảnh"></td>
+                                <td class="img-brand">
+                                    <img src="{{$brand->image}}" onerror="this.error=false;this.src='/images/image_blank.jpg'" alt="Hình ảnh">
+                                </td>
                                 <td>{{$brand->name}}</td>
                                 <td style="width: 55%">
                                     <div class="brand_des">{{$brand->description}}</div>
                                 </td>
                                 <td>
-                                    <button id="update_brand" data_id="{{$brand->id}}" class="btn btn-success btn-sm rounded-0 text-white" type="button" data-toggle="tooltip" data-placement="top" title="Edit"><i class="fa fa-edit"></i></button>
+                                    <a href="{{route('admin.brand.edit', $brand->id)}}" class="btn btn-success btn-sm rounded-0 text-white" type="button" data-toggle="tooltip" data-placement="top" title="edit"><i class="fa fa-edit"></i></a>
                                     <a href="{{route('admin.brand.delete', $brand->id)}}" class="btn btn-danger btn-sm rounded-0 text-white" type="button" data-toggle="tooltip" data-placement="top" title="Delete"><i class="fa fa-trash"></i></a>
                                 </td>
                             </tr>

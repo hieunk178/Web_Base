@@ -1,0 +1,17 @@
+.list-category__item-name > a.active {
+  color: var(--color-1) !important;
+}
+
+.product-item__inner .box-product__image {
+  transition: 0.4s;
+}
+.product-item__inner:hover {
+  display: block;
+  box-shadow: 2px 3px 6px rgba(0, 0, 0, 0.16);
+}
+.product-item__inner:hover .box-product__image {
+  transform: scale(1.1);
+}
+.product-item__inner:hover .product-item-name {
+  color: #002cbd !important;
+}

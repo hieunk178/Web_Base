@@ -4,6 +4,7 @@ namespace App\Repositories\CategoryProduct;
 
 interface CategoryRepositoryInterface
 {
+    public function getCategoryName();
     public function getCategory($where, $search);
     public function createCategory($search);
     public function updateCategory($search);

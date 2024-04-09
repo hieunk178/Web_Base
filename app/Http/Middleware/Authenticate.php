@@ -17,7 +17,8 @@ class Authenticate extends Middleware
     {
         if (!Auth::check()) {// Chưa đăng nhập
             return redirect()->route('login');
-        } else {
+        }
+        else {
             $user = Auth::user();  //Lấy thông tin user khi đã đăng nhập
             //Kiểm tra quyền của người dùng
             $route = $request->route()->getName();
@@ -30,9 +31,8 @@ class Authenticate extends Middleware
                     Auth::logout(); // Logout nếu không có quyền
                     return redirect()->route('login')->with(['danger' => 'Bạn không có quyền truy cập vào trang quản trị! Hãy liên hệ với quản trị viên để được cấp quyền!']); // Thêm thông báo lỗi
                 }
-                
-                
             }
         }
+        return $next($request);
     }
 }

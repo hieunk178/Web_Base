@@ -34,7 +34,7 @@ class CategoryRepository implements CategoryRepositoryInterface
 
         return $result;
     }
-    public function getCategory($where = "", $search)
+    public function getCategory($where = "", $search="")
     {
         // $parentName = DB::raw("(SELECT 'name' FROM category_products as cat WHERE cat.id = category_products.id_parent) as parent_name");
         // $cats = DB::table('category_products')
@@ -114,7 +114,7 @@ class CategoryRepository implements CategoryRepositoryInterface
     {
         return $this->cat->total();
     }
-    public function getCatCategoryName()
+    public function getCategoryName()
     {
         return $this->cat->getParent();
     }

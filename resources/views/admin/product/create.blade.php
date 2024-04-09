@@ -55,8 +55,16 @@
                         </div>
                     </div>
                 </div>
-
-
+                <div class="d-flex pb-3">
+                    <div class="d-flex align-items-center ">
+                        <input type="checkbox" name="product-hot" id="product-hot">
+                        <label class="mb-0 ml-1" for="product-hot">Nổi bật</label>
+                    </div>
+                    <div class="d-flex align-items-center ml-5">
+                        <input type="checkbox" name="product-hide" id="product-hide">
+                        <label class="mb-0 ml-1" for="product-hide">Ẩn sản phẩm</label>
+                    </div>
+                </div>
                 <div class="form-group">
                     <label for="product_detail">Chi tiết sản phẩm</label>
                     <textarea name="product_detail" class="form-control" id="product_detail" cols="30" rows="5"></textarea>
@@ -64,9 +72,9 @@
                 <div class="form-group">
                     <label for="image">Ảnh minh họa</label>
                     <div>
-                        <input type="file" name="image" id="image" accept="image/gif, image/jpeg, image/png" onchange="loadFile(event)">
+                        <input type="file" name="image" id="image" accept="image/gif, image/jpeg, image/png, image/webp" onchange="loadFile(event)">
                         <div class="avatar-img">
-                            <img id="image-show" src="{{asset('images/image_blank.jpg')}}" alt="Ảnh minh họa">
+                            <img id="image-show" src="/images/image_blank.jpg" alt="Ảnh minh họa">
                         </div>
                     </div>
                     @error('image')

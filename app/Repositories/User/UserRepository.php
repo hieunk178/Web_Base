@@ -48,7 +48,7 @@ class UserRepository implements UserRepositoryInterface
                 'email'=>'required|string|email|max:255|unique:users',
                 'password'=> 'required|string|min:8|confirmed',
                 'phone'=> 'string|digits:10',
-                'avatar' => 'mimes:jpg,png,gif|max:20000',
+                'avatar' => 'mimes:jpg,png,gif,webp|max:20000',
             ],
             [
                 'required'=> ':attribute không được bỏ trống!',
@@ -71,7 +71,7 @@ class UserRepository implements UserRepositoryInterface
             $avatar = 'user-blank.png';
         }else{
             $fileName = time().'.'.$request->avatar->extension();
-            $request->avatar->move(public_path("images"), $fileName);
+            $request->avatar->move(public_path("uploads"), $fileName);
             $avatar = $fileName;
         }
         $user = [
@@ -140,7 +140,7 @@ class UserRepository implements UserRepositoryInterface
                 'email'=>'required|string|email|max:255|unique:users',
                 'password'=> 'required|string|min:8|confirmed',
                 'phone'=> 'string|digits:10',
-                'avatar' => 'mimes:jpg,png,gif|max:20000',
+                'avatar' => 'mimes:jpg,png,gif,webp|max:20000',
             ],
             [
                 'required'=> ':attribute không được bỏ trống!',
@@ -168,7 +168,7 @@ class UserRepository implements UserRepositoryInterface
             $avatar = 'user-blank.png';
         }else{
             $fileName = time().'.'.$request->avatar->extension();
-            $request->avatar->move(public_path("images"), $fileName);
+            $request->avatar->move(public_path("uploads"), $fileName);
             $avatar = $fileName;
         }
         $user = [

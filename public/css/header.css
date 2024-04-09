@@ -1,0 +1,47 @@
+.header-top__item i {
+  font-size: 12px;
+}
+.header-top__link {
+  color: #707070;
+  font-size: 12px;
+  text-decoration: none;
+}
+.header .list-category {
+  display: none;
+  z-index: 1000;
+}
+.header .list-category__item:hover {
+  background-color: var(--color-3);
+}
+.header .list-category__item:hover > a, .header .list-category__item:hover > svg {
+  color: var(--color-4);
+}
+.header .header-bottom__category:hover > .list-category {
+  display: block;
+}
+
+.menu {
+  list-style: none;
+  margin: 0;
+}
+.menu-item {
+  display: inline-block;
+  margin: 0 8px;
+}
+.menu-item a {
+  text-wrap: wrap;
+  color: white;
+}
+.menu-item a:hover {
+  color: #cdc6c6;
+}
+
+.header-mobile .menu-mobile {
+  list-style: none;
+}
+.header-mobile .menu-mobile a {
+  font-weight: 500;
+}
+.header-mobile .menu-mobile a:hover {
+  color: #cdc6c6;
+}

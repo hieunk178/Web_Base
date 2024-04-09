@@ -22,9 +22,9 @@
                 <div class="form-group">
                     <label for="image">Ảnh minh họa</label>
                     <div>
-                        <input type="file" name="image" id="image" accept="image/gif, image/jpeg, image/png" onchange="loadFile(event)">
+                        <input type="file" name="image" id="image" accept="image/gif, image/jpeg, image/png, image/webp" onchange="loadFile(event)">
                         <div class="avatar-img">
-                        <img id="image-show" src="{{asset('images/'.$cat->image)}}" alt="Ảnh minh họa">
+                        <img id="image-show" src="{{$cat->image}}" alt="Ảnh minh họa">
                         </div>
                     </div>
                     @error('image')

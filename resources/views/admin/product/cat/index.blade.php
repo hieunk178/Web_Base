@@ -16,7 +16,7 @@
         @endif
     <div class="card">
         <div class="card-header font-weight-bold d-flex justify-content-between align-items-center">
-            <h5 class="m-0 ">Danh sách thành viên</h5>
+            <h5 class="m-0 ">Danh sách danh mục</h5>
             <div class="form-search form-inline">
                 <form action="">
                     <input type="" class="form-control form-search" name="keyword" placeholder="Tìm kiếm" value="{{request()->input('keyword')}}">
@@ -30,7 +30,7 @@
                 <a href="{{route('admin.product.cat.list.status', 'active')}}" class="text-primary">Hoạt động<span class="text-muted">({{$count['cat_active']}})</span></a>
                 <a href="{{route('admin.product.cat.list.status', 'del')}}" class="text-primary">Vô hiệu hóa<span class="text-muted">({{$count['cat_remove']}})</span></a>
             </div>
-            <form action="{{url('admin/user/action')}}" method="">
+            <form action="{{url('admin/product/cat/action')}}">
                 <div class="d-flex w-100 justify-content-between">
                     <div class="form-action form-inline py-3">
                         <select class="form-control mr-1" id="" name="act">
@@ -66,7 +66,7 @@
                             <td>
                                 <input type="checkbox" name="list_check[]" value="{{$cat->id}}">
                             </td>
-                            <td><img style="width:80px; height:80px" src="{{asset('images/'.$cat->image)}}" alt=""></td>
+                            <td><img style="width:80px; height:80px" src="{{$cat->image}}" alt=""></td>
                             <td>{{$cat->name}}</td>
                             <td>{{$cat->description}}</td>
                             @if($cat->id_parent == 0)

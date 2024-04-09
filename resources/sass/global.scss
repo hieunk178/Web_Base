@@ -1,0 +1,342 @@
+// Khuyến khích sử dụng font-family từ cdn của Google
+@import url('https://fonts.googleapis.com/css2?family=Roboto+Flex:opsz,wght@8..144,100..1000&display=swap');
+body {
+    font-family: "Roboto Flex", sans-serif !important;
+}
+
+
+:root {
+    --color-1: #4972ce;
+    --color-2: #fffffe;
+    --color-3: #047fd6;
+    --color-4: #fffffe;
+    --color-5: #ffffff;
+    --color-6: #000000;
+    --color-7: #ffffff;
+    --color-8: #f9f9f9;
+    --color-9: #afafaf;
+    --color-10: #000000;
+    --color-11: #cb1515;
+    --color-12: #707070;
+    --color-13: #169e30;
+    --color-14: #ffffff;
+    --color-15: #000000;
+
+    --fs-1: 2.5rem;
+    --fs-2: 2rem;
+    --fs-3: 1.75rem;
+    --fs-4: 1.5rem;
+    --fs-5: 1.25rem;
+    --fs-6: 1rem;
+    --fs-7: 0.875rem;
+    --fs-8: 0.75rem;
+    --fs-9: 0.625rem;
+
+    --fw-1: 100;
+    --fw-2: 200;
+    --fw-3: 300;
+    --fw-4: 400;
+    --fw-5: 500;
+    --fw-6: 600;
+    --fw-7: 700;
+    --fw-8: 800;
+    --fw-9: 900;
+
+    --rounded-1: 1px;
+    --rounded-2: 2px;
+    --rounded-3: 3px;
+    --rounded-4: 4px;
+    --rounded-5: 5px;
+    --rounded-6: 6px;
+    --rounded-7: 7px;
+    --rounded-8: 8px;
+    --rounded-9: 9px;
+    --rounded-10: 10px;
+}
+
+.fs {
+    &-1 {
+        font-size: var(--fs-1);
+    }
+    &-2 {
+        font-size: var(--fs-2);
+    }
+    &-3 {
+        font-size: var(--fs-3);
+    }
+    &-4 {
+        font-size: var(--fs-4);
+    }
+    &-5 {
+        font-size: var(--fs-5);
+    }
+    &-6 {
+        font-size: var(--fs-6);
+    }
+    &-7 {
+        font-size: var(--fs-7);
+    }
+    &-8 {
+        font-size: var(--fs-8);
+    }
+    &-9 {
+        font-size: var(--fs-9);
+    }
+}
+
+.fw {
+    &-1 {
+        font-weight: var(--fw-1);
+    }
+    &-2 {
+        font-weight: var(--fw-2);
+    }
+    &-3 {
+        font-weight: var(--fw-3);
+    }
+    &-4 {
+        font-weight: var(--fw-4);
+    }
+    &-5 {
+        font-weight: var(--fw-5);
+    }
+    &-6 {
+        font-weight: var(--fw-6);
+    }
+}
+
+.color {
+    &-1 {
+        color: var(--color-1);
+    }
+    &-2 {
+        color: var(--color-2);
+    }
+    &-3 {
+        color: var(--color-3);
+    }
+    &-4 {
+        color: var(--color-4);
+    }
+    &-5 {
+        color: var(--color-5);
+    }
+    &-6 {
+        color: var(--color-6);
+    }
+    &-7 {
+        color: var(--color-7);
+    }
+    &-8 {
+        color: var(--color-8);
+    }
+    &-9 {
+        color: var(--color-9);
+    }
+    &-10 {
+        color: var(--color-10);
+    }
+    &-11 {
+        color: var(--color-11);
+    }
+    &-12 {
+        color: var(--color-12);
+    }
+    &-13 {
+        color: var(--color-13);
+    }
+    &-14 {
+        color: var(--color-14);
+    }
+}
+
+.bg-color {
+    &-1 {
+        background-color: var(--color-1);
+    }
+    &-2 {
+        background-color: var(--color-2);
+    }
+    &-3 {
+        background-color: var(--color-3);
+    }
+    &-4 {
+        background-color: var(--color-4);
+    }
+    &-5 {
+        background-color: var(--color-5);
+    }
+    &-6 {
+        background-color: var(--color-6);
+    }
+    &-7 {
+        background-color: var(--color-7);
+    }
+    &-8 {
+        background-color: var(--color-8);
+    }
+    &-9 {
+        background-color: var(--color-9);
+    }
+    &-10 {
+        background-color: var(--color-10);
+    }
+    &-11 {
+        background-color: var(--color-11);
+    }
+    &-12 {
+        background-color: var(--color-12);
+    }
+    &-13 {
+        background-color: var(--color-13);
+    }
+    &-14 {
+        background-color: var(--color-14);
+    }
+}
+
+.border-color {
+    &-1 {
+        border-color: var(--color-1);
+    }
+    &-2 {
+        border-color: var(--color-2);
+    }
+    &-3 {
+        border-color: var(--color-3);
+    }
+    &-4 {
+        border-color: var(--color-4);
+    }
+    &-5 {
+        border-color: var(--color-5);
+    }
+    &-6 {
+        border-color: var(--color-6);
+    }
+    &-7 {
+        border-color: var(--color-7);
+    }
+    &-8 {
+        border-color: var(--color-8);
+    }
+    &-9 {
+        border-color: var(--color-9);
+    }
+    &-10 {
+        border-color: var(--color-10);
+    }
+    &-11 {
+        border-color: var(--color-11);
+    }
+    &-12 {
+        border-color: var(--color-12);
+    }
+    &-13 {
+        border-color: var(--color-13);
+    }
+    &-14 {
+        border-color: var(--color-14);
+    }
+}
+.rounded {
+    &-1 {
+        border-radius: var(--rounded-1);
+    }
+    &-2 {
+        border-radius: var(--rounded-2);
+    }
+    &-3 {
+        border-radius: var(--rounded-3);
+    }
+    &-4 {
+        border-radius: var(--rounded-4);
+    }
+    &-5 {
+        border-radius: var(--rounded-5);
+    }
+    &-6 {
+        border-radius: var(--rounded-6);
+    }
+    &-7 {
+        border-radius: var(--rounded-7);
+    }
+    &-8 {
+        border-radius: var(--rounded-8);
+    }
+    &-9 {
+        border-radius: var(--rounded-9);
+    }
+    &-10 {
+        border-radius: var(--rounded-10);
+    }
+}
+.hover {
+    &-color {
+        &-1:hover {
+            color: var(--color-1);
+        }
+        &-2:hover {
+            color: var(--color-2);
+        }
+        &-3:hover {
+            color: var(--color-3);
+        }
+        &-4:hover {
+            color: var(--color-4);
+        }
+        &-5:hover {
+            color: var(--color-5);
+        }
+        &-6:hover {
+            color: var(--color-6);
+        }
+        &-7:hover {
+            color: var(--color-7);
+        }
+        &-8:hover {
+            color: var(--color-8);
+        }
+        &-9:hover {
+            color: var(--color-9);
+        }
+        &-10:hover {
+            color: var(--color-10);
+        }
+    }
+    &-bg-color {
+        &-1:hover {
+            background-color: var(--color-1);
+        }
+        &-2:hover {
+            background-color: var(--color-2);
+        }
+        &-3:hover {
+            background-color: var(--color-3);
+        }
+        &-4:hover {
+            background-color: var(--color-4);
+        }
+        &-5:hover {
+            background-color: var(--color-5);
+        }
+        &-6:hover {
+            background-color: var(--color-6);
+        }
+        &-7:hover {
+            background-color: var(--color-7);
+        }
+        &-8:hover {
+            background-color: var(--color-8);
+        }
+        &-9:hover {
+            background-color: var(--color-9);
+        }
+        &-10:hover {
+            background-color: var(--color-10);
+        }
+    }
+}
+
+
+

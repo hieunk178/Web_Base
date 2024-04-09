@@ -1,0 +1,16 @@
+.product-search {
+  margin: auto;
+}
+.product-search-item__inner .box-product-search__image img {
+  transition: 0.4s;
+}
+.product-search-item__inner:hover {
+  display: block;
+  box-shadow: 0px 3px 6px rgba(0, 0, 0, 0.16);
+}
+.product-search-item__inner:hover .box-product-search__image img {
+  transform: scale(1.1);
+}
+.product-search-item__inner:hover .product-search-item-name {
+  color: #002cbd !important;
+}

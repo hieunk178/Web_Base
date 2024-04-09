@@ -24,10 +24,23 @@
             </div>
         </div>
         <div class="card-body">
-            <div class="analytic">
-                <a href="{{route('admin.product.index')}}" class="text-primary">Tất cả<span class="text-muted">({{$count['all_pro']}})</span></a>
-                <a href="{{route('admin.product.list.status', 'active')}}" class="text-primary">Hoạt động<span class="text-muted">({{$count['pro_active']}})</span></a>
-                <a href="{{route('admin.product.list.status', 'del')}}" class="text-primary">Ẩn<span class="text-muted">({{$count['pro_remove']}})</span></a>
+            <div class="d-flex align-items-center justify-content-between">
+                <div class="analytic">
+                    <a href="{{route('admin.product.index')}}" class="text-primary">Tất cả<span class="text-muted">({{$count['all_pro']}})</span></a>
+                    <a href="{{route('admin.product.list.status', 'active')}}" class="text-primary">Hoạt động<span class="text-muted">({{$count['pro_active']}})</span></a>
+                    <a href="{{route('admin.product.list.status', 'del')}}" class="text-primary">Ẩn<span class="text-muted">({{$count['pro_remove']}})</span></a>
+                </div>
+                <div class="d-flex align-items-center">
+                    <form class="d-flex align-items-center" action="{{route('admin.product.import')}}" method="post" enctype="multipart/form-data">
+                        @csrf
+                        <input type="file" id="file" name="file" accept=".xls,.xlsx">
+                        <button id="btn-import" class="btn btn-primary" type="submit">Import dữ liệu</button>
+                        @error('file')
+                            {{ $message }}
+                        @enderror
+                    </form>
+                    <a href="{{route('admin.product.export')}}" class="btn btn-success ml-3">Xuât dữ liệu</a>
+                </div>
             </div>
             <form action="{{route('admin.product.action')}}">
                 @csrf
@@ -51,7 +64,6 @@
                         <th scope="col">Tên sản phẩm</th>
                         <th scope="col">Giá bán</th>
                         <th scope="col">Danh mục</th>
-                        <th scope="col">Ngày tạo</th>
                         <th scope="col">Trạng thái</th>
                         <th scope="col">Tác vụ</th>
                     </tr>
@@ -70,15 +82,21 @@
                             <input type="checkbox" name="list_check[]" value="{{$product->id}}">
                         </td>
                         <td>{{$count}}</td>
-                        <td><img style="width:80px; height:80px" src="{{asset('images/'.$product->image)}}" alt=""></td>
-                        <td><a href="#">{{$product->name}}</a></td>
+                        <td><img style="width:80px; height:80px" class="object-fit-cover" src="{{$product->image}}" alt=""></td>
+                        <td class="">
+                            {{$product->name}}<br>
+                            <a href="{{asset('/product/' . $product->slug ?? '')}}" class="fs-8" target="_blank">{{asset('/product/' . $product->slug ?? '')}}</a><br>
+                            @if ($product->hot == 1)
+                                <span class="text-white bg-warning rounded px-2 fs-8 py-1 mt-1">Nổi bật</span>
+                            @endif
+                            <span></span>
+                        </td>
                         <td>{{number_format($product->price, 0, '.', ',').' VND'}}</td>
                         <td>{{$product->cat_name}}</td>
-                        <td>{{$product->created_at}}</td>
-                        @if($product->status == "Còn hàng")
-                        <td><span class="badge badge-success p-2">{{$product->status}}</span></td>
+                        @if($product->status)
+                        <td><span class="badge badge-success p-2">Hoạt động</span></td>
                         @else
-                        <td><span class="badge badge-danger p-2">{{$product->status}}</span></td>
+                        <td><span class="badge badge-danger p-2">Không hoạt động</span></td>
                         @endif
                         <td>
                             @if($product->deleted_at == null)

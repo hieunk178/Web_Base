@@ -7,6 +7,8 @@ use App\Http\Controllers\Api\ApiCartController;
 use App\Http\Controllers\Api\ApiAuthController;
 
 use App\Http\Controllers\Admin\RoleController;
+use App\Http\Controllers\Api\FileController;
+use Illuminate\Support\Facades\Auth;
 
 /*
 |--------------------------------------------------------------------------
@@ -40,4 +42,5 @@ Route::middleware('token.verify')->group(function () {
     Route::get('cart', [ApiCartController::class, 'getCart'])->name('api.getCart');
 });
 Route::get('listRoute', [RoleController::class, 'listRoute'])->name('.listRoute');
+Route::post('file/upload', [FileController::class, 'upload'])->name('file.upload');
 

@@ -1,0 +1,12 @@
+{
+    "/js/app.js": "/js/app.js",
+    "/css/global.css": "/css/global.css",
+    "/css/header.css": "/css/header.css",
+    "/css/common.css": "/css/common.css",
+    "/css/home-page.css": "/css/home-page.css",
+    "/css/style.css": "/css/style.css",
+    "/css/search-page.css": "/css/search-page.css",
+    "/css/product-category.css": "/css/product-category.css",
+    "/css/product-detail.css": "/css/product-detail.css",
+    "/css/footer.css": "/css/footer.css"
+}

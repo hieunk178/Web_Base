@@ -38,7 +38,7 @@
                     <div>
                         <input type="file" name="avatar" id="avatar" onchange="loadFile(event)">
                         <div class="avatar-img">
-                            <img id="image-show"  src="{{asset('images/user-blank.png')}}" alt="Ảnh đại diện">
+                            <img id="image-show"  src="/images/user-blank.png}}" alt="Ảnh đại diện">
                         </div>
                     </div>
                 </div>

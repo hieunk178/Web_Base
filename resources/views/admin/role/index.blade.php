@@ -3,13 +3,19 @@
 <div id="content" class="container-fluid">
 <div class="card">
     @if(session('success'))
-    <div class="alert alert-success alert-dismissible">{{session('success')}}</div>
+    <div class="alert alert-success alert-dismissible">
+        <button type="button" class="close" data-dismiss="alert">&times;</button>
+        {{session('success')}}
+    </div>
     @endif
     @if(session('danger'))
-    <div class="alert alert-danger alert-dismissible">{{session('danger')}}</div>
+    <div class="alert alert-danger alert-dismissible">
+        <button type="button" class="close" data-dismiss="alert">&times;</button>
+        {{session('danger')}}
+    </div>
     @endif
     <div class="card-header font-weight-bold d-flex justify-content-between align-items-center">
-        <h5 class="m-0 ">Danh sách phân quyền</h5>
+        <h5 class="m-0 ">Danh sách nhóm quyền</h5>
         <div class="form-search form-inline">
             <form action="">
                 <input type="" class="form-control form-search" name="keyword" placeholder="Tìm kiếm" value="{{request()->input('keyword')}}">
@@ -39,7 +45,7 @@
                         <td>{{$model->id}}</td>
                         <td>{{$model->name}}</td>
                         <td>
-                            <a href="" class="btn btn-xs btn-primary">Sửa</a>
+                            <a href="{{route('admin.role.edit', $model->id)}}" class="btn btn-xs btn-primary">Sửa</a>
                             <a href="" class="btn btn-xs btn-danger">Xóa</a>
                         </td>
                     </tr>

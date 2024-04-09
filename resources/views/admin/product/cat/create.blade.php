@@ -22,9 +22,9 @@
                 <div class="form-group">
                     <label for="image">Ảnh minh họa</label>
                     <div>
-                        <input type="file" name="image" id="image" accept="image/gif, image/jpeg, image/png" onchange="loadFile(event)">
+                        <input type="file" name="image" id="image" accept="image/gif, image/jpeg, image/png, image/webp" onchange="loadFile(event)">
                         <div class="avatar-img">
-                        <img id="image-show" src="{{asset('images/image_blank.jpg')}}" alt="Ảnh minh họa">
+                        <img id="image-show" src="/images/image_blank.jpg" alt="Ảnh minh họa">
                         </div>
                     </div>
                     @error('image')
@@ -40,7 +40,7 @@
                         @endforeach
                     </select>
                 </div>
-                
+
                 <button type="submit" name="btnCreate" value="Thêm mới" class="btn btn-primary">Thêm mới</button>
             </form>
         </div>

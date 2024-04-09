@@ -51,16 +51,17 @@ class ProductRepository implements ProductRepositoryInterface
     }
     public function getProduct($where = "", $search)
     {
-        $status = DB::raw("(CASE WHEN products.quantity = 0 THEN 'Hết hàng' ELSE 'Còn hàng' END) as status");
         $products = DB::table('products')
             ->join('category_products', 'category_products.id', 'products.cat_id')
             ->select(
                 'products.id',
+                'products.slug',
                 'products.name',
                 'products.image',
                 $this->price,
+                'status',
+                'hot',
                 'category_products.name as cat_name',
-                $status,
                 'products.created_at',
                 'products.deleted_at'
             );
